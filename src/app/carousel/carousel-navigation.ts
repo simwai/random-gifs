@@ -12,6 +12,7 @@ export class NgbdCarouselNavigationComponent {
   @Input() public interval = 10000
   @Input() public keyword = 'cat'
 
+  private _lastKeyword
   private _offset = 0
   private _gifAmount = 10
 
@@ -21,7 +22,7 @@ export class NgbdCarouselNavigationComponent {
     const config = { wait: this.interval }
 
     setDynterval(context => {
-      console.log('interval', context)
+      this.fetchGifs()
 
       return { ...context, wait: this.interval }
     }, config)
@@ -29,6 +30,11 @@ export class NgbdCarouselNavigationComponent {
 
   public fetchGifs(): void {
     this._giphyService.getGif(this.keyword, this._gifAmount, this._offset).subscribe(response => {
+      if (this._lastKeyword !== this.keyword) {
+        this.images = []
+      }
+
+      this._lastKeyword = this.keyword
       this.images = Array()
 
       response.data.forEach(element => {
