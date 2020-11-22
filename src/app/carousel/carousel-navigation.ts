@@ -8,7 +8,7 @@ import { setDynterval } from 'dynamic-interval'
   styleUrls: ['./carousel-navigation.scss']
 })
 export class NgbdCarouselNavigationComponent {
-  public images: string[]
+  public images: string[] = []
   @Input() public interval = 10000
   @Input() public keyword = 'cat'
 
@@ -35,7 +35,6 @@ export class NgbdCarouselNavigationComponent {
       }
 
       this._lastKeyword = this.keyword
-      this.images = Array()
 
       response.data.forEach(element => {
         this.images.push(element.images.original.url)
