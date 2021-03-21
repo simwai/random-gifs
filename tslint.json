@@ -150,7 +150,7 @@
     ],
     "component-selector": [
       true,
-      "element",
+      "element"
       // "app",
       // "kebab-case"
     ]

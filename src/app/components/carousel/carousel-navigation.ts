@@ -2,6 +2,7 @@ import { Component, Input, ViewChild, AfterViewInit } from '@angular/core'
 import { GiphyService } from '../../services/giphy.service'
 import { setDynterval } from 'dynamic-interval'
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
+import { LocalStorage } from 'ngx-webstorage'
 
 @Component({
   selector: 'carousel-navigation',
@@ -16,7 +17,22 @@ export class CarouselNavigationComponent implements AfterViewInit {
   public images: string[] = []
   @Input() public interval = 10000
   @Input() public keyword = 'cat'
-  @Input() public bgColor = '#9181e6'
+
+  @LocalStorage('bgColor')
+  private _bgColor: string
+
+  public get bgColor(): string {
+    return this._bgColor
+  }
+
+  @Input() public set bgColor(value: string) {
+    if (!this._bgColor) {
+      // default bgColor
+      this._bgColor = '#8f6eeb'
+    } else {
+      this._bgColor = value
+    }
+  }
 
   public initialized = false
 
