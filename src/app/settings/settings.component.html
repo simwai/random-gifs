@@ -1,0 +1,24 @@
+<div class="modal-header">
+  <h4 class="modal-title">Settings</h4>
+</div>
+<div class="modal-body text-center">
+  <form>
+  <div class="form-group">
+    <label for="keywordInput">Keyword</label><br>
+    <input [(ngModel)]="keyword" name="keywordInput" type="text" placeholder="Enter keyword" />
+  </div>
+  <div class="form-group">
+    <label for="intervalInput">Gif View Duration (in ms)</label><br>
+    <input [(ngModel)]="interval" name="intervalInput" type="text" placeholder="Enter gif view duration" />
+  </div>
+  <div class="form-group">
+    <label for="intervalInput">Background Color</label><br>
+    <!-- TODO prevent keyboard pop up on smartphones adn tablets -->
+    <input [(colorPicker)]="bgColor" (colorPickerChange)="bgColor" name="bgColorInput" placeholder="Enter background color" [value]="bgColor ? bgColor : ''" />
+  </div>
+  <button type="button" class="btn--w3c" [ngStyle]="{ 'background-color': bgColor, 'border-color': 'black' }"  (click)="passBack()">Submit</button>
+</form>
+</div>
+<div class="modal-footer">
+  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+</div>

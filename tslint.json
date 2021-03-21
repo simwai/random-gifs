@@ -43,6 +43,7 @@
         ]
       }
     ],
+    "member-access": true,
     "no-console": [
       true,
       "debug",
@@ -52,10 +53,10 @@
       "trace"
     ],
     "no-empty": false,
-    "no-inferrable-types": [
-      true,
-      "ignore-params"
-    ],
+    // "no-inferrable-types": [
+    //   true,
+    //   "ignore-params"
+    // ],
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
@@ -70,7 +71,7 @@
     ],
     "semicolon": {
       "options": [
-        "always"
+        "never"
       ]
     },
     "space-before-function-paren": {
@@ -108,7 +109,8 @@
       "options": [
         "ban-keywords",
         "check-format",
-        "allow-pascal-case"
+        "allow-pascal-case",
+        "allow-leading-underscore"
       ]
     },
     "whitespace": {
@@ -118,7 +120,11 @@
         "check-operator",
         "check-separator",
         "check-type",
-        "check-typecast"
+        "check-typecast",
+        "check-module",
+        "check-decl",
+        "check-typecast",
+        "check-postbrace"
       ]
     },
     "component-class-suffix": true,
@@ -145,8 +151,8 @@
     "component-selector": [
       true,
       "element",
-      "app",
-      "kebab-case"
+      // "app",
+      // "kebab-case"
     ]
   }
 }
