@@ -1,8 +1,7 @@
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
 import { Component, HostListener, ViewChild } from '@angular/core'
-import { NgbModal, NgbModalOptions, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
-import { SettingsComponent } from './settings/settings.component'
+import { ModalService } from './services/modal.service'
 
 @Component({
   selector: 'app-root',
@@ -13,29 +12,16 @@ export class AppComponent {
   // {static: false } is default
   @ViewChild(CarouselNavigationComponent) public carouselNav: CarouselNavigationComponent
 
-  private _isModalVisible: boolean = false
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
-  private _modalRef: NgbModalRef
 
-  private readonly ngbModalOptions = {
-    centered: true,
-    size: 'sm'
-  }
-
-  constructor(private _modal: NgbModal) { }
+  constructor(private _modalService: ModalService) { }
 
   @HostListener('document:keypress', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent): void {
     if (event.key === 'Enter') {
-      const options: NgbModalOptions = this.ngbModalOptions
-      this._modalRef = this._modal.open(SettingsComponent, options)
-
-      if (!this._isModalVisible) {
-        this.updateDiashowParameters(this._modalRef)
-      }
-
-      this._isModalVisible = !this._isModalVisible
+      console.log('triggered in apps component')
+      this._modalService.tryOpenModal(this)
     }
   }
 
@@ -56,14 +42,7 @@ export class AppComponent {
           if (direction[1] < 0) {
             console.log('swipe up')
 
-            const options: NgbModalOptions = this.ngbModalOptions
-            this._modalRef = this._modal.open(SettingsComponent, options)
-
-            if (!this._isModalVisible) {
-              this.updateDiashowParameters(this._modalRef)
-            }
-
-            this._isModalVisible = !this._isModalVisible
+            this._modalService.tryOpenModal(this)
           }
         } else if ((Math.abs(direction[0]) > 10 && (Math.abs(direction[1] * 3) < Math.abs(direction[0])))) { // Horizontal enough
           // Left swipe
@@ -81,24 +60,6 @@ export class AppComponent {
           }
         }
       }
-    }
-  }
-
-  private updateDiashowParameters(modalRef: NgbModalRef): void {
-    if (!this._isModalVisible) {
-      modalRef.result.then((settingData) => {
-        if (settingData.keyword) {
-          this.carouselNav.keyword = settingData.keyword
-        }
-
-        if (settingData.interval) {
-          this.carouselNav.interval = settingData.interval
-        }
-
-        if (settingData.bgColor) {
-          this.carouselNav.bgColor = settingData.bgColor
-        }
-      })
     }
   }
 }

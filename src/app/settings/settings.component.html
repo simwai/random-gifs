@@ -16,9 +16,8 @@
     <!-- TODO prevent keyboard pop up on smartphones adn tablets -->
     <input [(colorPicker)]="bgColor" (colorPickerChange)="bgColor" name="bgColorInput" placeholder="Enter background color" [value]="bgColor ? bgColor : ''" />
   </div>
-  <button type="button" [style.color]="fontColor" [ngStyle]="{ 'background-color': bgColor, 'border-color': 'black' }"  (click)="passBack()">Submit</button>
 </form>
 </div>
 <div class="modal-footer">
-  <button type="button" class="btn btn-outline-dark" (click)="activeModal.close('Close click')">Close</button>
+  <button type="button" class="btn btn-outline-dark" (click)="passBack()">Close</button>
 </div>
