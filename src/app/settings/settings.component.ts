@@ -2,6 +2,8 @@ import { Component, HostListener, Input } from '@angular/core'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
 
+const defaultValues = require('../default-values.json')
+
 @Component({
   selector: 'settings',
   templateUrl: './settings.component.html',
@@ -11,7 +13,7 @@ export class SettingsComponent {
   constructor(public activeModal: NgbActiveModal) { }
 
   public get keyword(): string {
-    return this._keyword ?? 'cat'
+    return this._keyword ?? defaultValues.keyword
   }
 
   @Input() public set keyword(value) {
@@ -19,7 +21,7 @@ export class SettingsComponent {
   }
 
   public get interval(): number {
-    return this._interval ?? 10000
+    return this._interval ?? defaultValues.interval
   }
 
   @Input() public set interval(value) {
@@ -27,7 +29,7 @@ export class SettingsComponent {
   }
 
   public get bgColor(): string {
-    return this._bgColor ?? 'lightgray'
+    return this._bgColor ?? defaultValues.bgColor
   }
 
   @Input() public set bgColor(value) {
@@ -38,7 +40,7 @@ export class SettingsComponent {
   }
 
   public get fontColor(): string {
-    return this._fontColor ?? 'black'
+    return this._fontColor ?? defaultValues.fontColor
   }
 
   @LocalStorage('keyword')

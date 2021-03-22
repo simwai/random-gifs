@@ -17,35 +17,18 @@ export class ModalService {
 
   constructor(private _modal: NgbModal) { }
 
-  public tryOpenModal(callRef): void {
+  public async tryOpenModal(): Promise<NgbModalRef> | null {
     const options: NgbModalOptions = this.ngbModalOptions
-    this._modalRef = this._modal.open(SettingsComponent, options)
 
     if (!ModalService.isModalVisible) {
-      this.updateDiashowParameters(this._modalRef, callRef)
+      this._modalRef = this._modal.open(SettingsComponent, options)
 
       ModalService.isModalVisible = true
+
+      return this._modalRef.result
     }
 
     ModalService.isModalVisible = false
+    return null
   }
-
-  public updateDiashowParameters(modalRef: NgbModalRef, callRef): void {
-    if (!ModalService.isModalVisible) {
-      modalRef.result.then((settingData) => {
-        if (settingData.keyword) {
-          callRef.keyword = settingData.keyword
-        }
-
-        if (settingData.interval) {
-          callRef.interval = settingData.interval
-        }
-
-        if (settingData.bgColor) {
-          callRef.bgColor = settingData.bgColor
-        }
-      })
-    }
-  }
-
 }

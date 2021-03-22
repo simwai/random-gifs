@@ -18,14 +18,14 @@ export class AppComponent {
   constructor(private _modalService: ModalService) { }
 
   @HostListener('document:keypress', ['$event'])
-  public handleKeyboardEvent(event: KeyboardEvent): void {
+  public async handleKeyboardEvent(event: KeyboardEvent): Promise<void> {
     if (event.key === 'Enter') {
       console.log('triggered in apps component')
-      this._modalService.tryOpenModal(this)
+      await this._modalService.tryOpenModal()
     }
   }
 
-  public swipe(e: TouchEvent, when: string): void {
+  public async swipe(e: TouchEvent, when: string): Promise<void> {
     const coord: [number, number] = [e.changedTouches[0].clientX, e.changedTouches[0].clientY]
     const time = new Date().getTime()
 
@@ -42,7 +42,7 @@ export class AppComponent {
           if (direction[1] < 0) {
             console.log('swipe up')
 
-            this._modalService.tryOpenModal(this)
+            await this._modalService.tryOpenModal()
           }
         } else if ((Math.abs(direction[0]) > 10 && (Math.abs(direction[1] * 3) < Math.abs(direction[0])))) { // Horizontal enough
           // Left swipe

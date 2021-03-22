@@ -1,10 +1,12 @@
-import { Component, ViewChild, AfterViewInit } from '@angular/core'
+import { Component, ViewChild, AfterViewInit, Input } from '@angular/core'
 import { setDynterval } from 'dynamic-interval'
-import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
+import { NgbCarouselConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
 
 import { GiphyService } from '../../services/giphy.service'
 import { ModalService } from 'src/app/services/modal.service'
+
+const defaultValues = require('../../default-values.json')
 
 @Component({
   selector: 'carousel-navigation',
@@ -16,14 +18,38 @@ import { ModalService } from 'src/app/services/modal.service'
 export class CarouselNavigationComponent implements AfterViewInit {
   @ViewChild('carousel') public carousel: any
 
-  @LocalStorage()
-  public interval: number
+  @LocalStorage('interval')
+  private _interval: number
 
-  @LocalStorage()
-  public bgColor: string
+  public get interval(): number {
+    console.log(this._interval)
+    return this._interval ?? defaultValues.interval
+  }
 
-  @LocalStorage()
-  public keyword: string
+  @Input() public set interval(value) {
+    this._interval = value
+  }
+
+  @LocalStorage('bgColor')
+  private _bgColor: string
+
+  public get bgColor(): string {
+    return this._bgColor ?? defaultValues.bgColor
+  }
+
+  public set bgColor(value: string) {
+    this._bgColor = value
+  }
+
+
+  @LocalStorage('keyword')
+  private _keyword: string
+
+
+  public get keyword(): string {
+    return this._keyword ?? defaultValues.keyword
+  }
+
 
   @LocalStorage()
   public fontColor: string
@@ -77,8 +103,8 @@ export class CarouselNavigationComponent implements AfterViewInit {
     this.carousel.prev()
   }
 
-  public openModal(): void {
-    this._modalService.tryOpenModal(this)
+  public async openModal(): Promise<NgbModalRef> {
+    return this._modalService.tryOpenModal()
   }
 
   public ngAfterViewInit(): void {
@@ -89,7 +115,6 @@ export class CarouselNavigationComponent implements AfterViewInit {
     this.carousel.pauseOnFocus = false
     this.carousel.showNavigationIndicators = false
     this.carousel.showNavigationArrows = false
-    this.carousel.interval = 10000
 
     this.carousel.focus()
   }
