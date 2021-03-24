@@ -12,6 +12,9 @@ const defaultValues = require('../default-values.json')
 export class SettingsComponent {
   constructor(public activeModal: NgbActiveModal) { }
 
+  @LocalStorage('keyword')
+  private _keyword: string
+
   public get keyword(): string {
     return this._keyword ?? defaultValues.keyword
   }
@@ -19,6 +22,9 @@ export class SettingsComponent {
   @Input() public set keyword(value) {
     this._keyword = value
   }
+
+  @LocalStorage('interval')
+  private _interval: number
 
   public get interval(): number {
     return this._interval ?? defaultValues.interval
@@ -28,6 +34,12 @@ export class SettingsComponent {
     this._interval = value
   }
 
+  @LocalStorage('fontColor')
+  private _fontColor
+
+  @LocalStorage('bgColor')
+  private _bgColor: string
+
   public get bgColor(): string {
     return this._bgColor ?? defaultValues.bgColor
   }
@@ -36,24 +48,11 @@ export class SettingsComponent {
     this._bgColor = value
 
     this._fontColor = SettingsComponent.getContrast(value)
-    console.log(this.fontColor)
   }
 
   public get fontColor(): string {
     return this._fontColor ?? defaultValues.fontColor
   }
-
-  @LocalStorage('keyword')
-  private _keyword: string
-
-  @LocalStorage('interval')
-  private _interval: number
-
-  @LocalStorage('bgColor')
-  private _bgColor: string
-
-  @LocalStorage('fontColor')
-  private _fontColor
 
  // TODO put this in utility class
  /*!

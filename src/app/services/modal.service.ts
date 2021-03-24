@@ -9,6 +9,7 @@ import { SettingsComponent } from '../settings/settings.component'
 export class ModalService {
 
   public static isModalVisible: boolean = false
+
   private _modalRef: NgbModalRef
   private readonly ngbModalOptions = {
     centered: true,
@@ -31,4 +32,5 @@ export class ModalService {
     ModalService.isModalVisible = false
     return null
   }
+
 }

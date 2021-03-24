@@ -53,3 +53,24 @@ ngb-carousel {
   height: auto
 }
 
+.svg-icon {
+  width: 3rem;
+  height: auto;
+  fill: white;
+}
+
+.svg-icon-padding-right {
+  @extend .svg-icon;
+
+  padding-right: 0.5rem;
+}
+
+.svg-icon-wrapper {
+  margin-top: -0.2rem;
+  margin-bottom: -0.2rem;
+}
+
+.svg-icon-padding-right-wrapper {
+  padding-top: 0.3rem;
+  padding-bottom: 0.3rem;
+}

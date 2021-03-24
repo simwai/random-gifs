@@ -14,7 +14,7 @@
   <div class="form-group">
     <label for="intervalInput">Background Color</label><br>
     <!-- TODO prevent keyboard pop up on smartphones adn tablets -->
-    <input [(colorPicker)]="bgColor" (colorPickerChange)="bgColor" name="bgColorInput" placeholder="Enter background color" [value]="bgColor ? bgColor : ''" />
+    <input [(colorPicker)]="bgColor" (colorPickerChange)="bgColor = $event" [cpOutputFormat]="'hex'" name="bgColorInput" placeholder="Enter background color" [value]="bgColor ? bgColor : ''" />
   </div>
 </form>
 </div>

@@ -17,5 +17,6 @@ module.exports = {
     "selector-pseudo-element-no-unknown": null,
     "selector-type-no-unknown": null,
     "declaration-colon-space-after": "always",
-  }
+  },
+  ignoreFiles: ["node_modules/*.scss"]
 }

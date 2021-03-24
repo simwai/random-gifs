@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, Input } from '@angular/core'
+import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input } from '@angular/core'
 import { setDynterval } from 'dynamic-interval'
 import { NgbCarouselConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
@@ -22,11 +22,10 @@ export class CarouselNavigationComponent implements AfterViewInit {
   private _interval: number
 
   public get interval(): number {
-    console.log(this._interval)
     return this._interval ?? defaultValues.interval
   }
 
-  @Input() public set interval(value) {
+  public set interval(value) {
     this._interval = value
   }
 
@@ -63,12 +62,13 @@ export class CarouselNavigationComponent implements AfterViewInit {
   constructor(private _giphyService: GiphyService, private _modalService: ModalService) {
     this.fetchGifs()
 
-    const config = { wait: this.interval }
+    // TODO maybe 10000 is not correct, could depend on view duration
+    const config = { wait: 10000 }
 
     setDynterval(context => {
       this.fetchGifs()
 
-      return { ...context, wait: this.interval }
+      return { ...context, wait: 10000 }
     }, config)
   }
 
@@ -110,12 +110,14 @@ export class CarouselNavigationComponent implements AfterViewInit {
   public ngAfterViewInit(): void {
     // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
 
-    this.carousel.animation = false
-    this.carousel.pauseOnHover = false
-    this.carousel.pauseOnFocus = false
-    this.carousel.showNavigationIndicators = false
-    this.carousel.showNavigationArrows = false
+    if (this.carousel) {
+      this.carousel.animation = false
+      this.carousel.pauseOnHover = false
+      this.carousel.pauseOnFocus = false
+      this.carousel.showNavigationIndicators = false
+      this.carousel.showNavigationArrows = false
+    }
 
-    this.carousel.focus()
+    // this.carousel.focus()
   }
 }

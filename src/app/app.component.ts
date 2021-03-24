@@ -2,6 +2,7 @@ import { CarouselNavigationComponent } from './components/carousel/carousel-navi
 import { Component, HostListener, ViewChild } from '@angular/core'
 
 import { ModalService } from './services/modal.service'
+import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'app-root',
@@ -21,7 +22,12 @@ export class AppComponent {
   public async handleKeyboardEvent(event: KeyboardEvent): Promise<void> {
     if (event.key === 'Enter') {
       console.log('triggered in apps component')
-      await this._modalService.tryOpenModal()
+
+      try {
+        await this._modalService.tryOpenModal()
+      } catch (_error){
+        ModalService.isModalVisible = false
+      }
     }
   }
 
@@ -41,8 +47,11 @@ export class AppComponent {
           // Up swipe
           if (direction[1] < 0) {
             console.log('swipe up')
-
-            await this._modalService.tryOpenModal()
+            try {
+              await this._modalService.tryOpenModal()
+            } catch (_error) {
+              ModalService.isModalVisible = false
+            }
           }
         } else if ((Math.abs(direction[0]) > 10 && (Math.abs(direction[1] * 3) < Math.abs(direction[0])))) { // Horizontal enough
           // Left swipe
