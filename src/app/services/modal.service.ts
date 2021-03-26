@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core'
-import { NgbModalRef, NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap'
+import { NgbModal, NgbModalOptions } from '@ng-bootstrap/ng-bootstrap'
+import { CarouselNavigationComponent } from '../components/carousel/carousel-navigation'
 
 import { SettingsComponent } from '../settings/settings.component'
 
@@ -10,7 +11,6 @@ export class ModalService {
 
   public static isModalVisible: boolean = false
 
-  private _modalRef: NgbModalRef
   private readonly ngbModalOptions = {
     centered: true,
     size: 'sm'
@@ -18,19 +18,20 @@ export class ModalService {
 
   constructor(private _modal: NgbModal) { }
 
-  public async tryOpenModal(): Promise<NgbModalRef> | null {
+  public async tryOpenModal(): Promise < void > {
     const options: NgbModalOptions = this.ngbModalOptions
 
     if (!ModalService.isModalVisible) {
-      this._modalRef = this._modal.open(SettingsComponent, options)
+      try {
+        this._modal.open(SettingsComponent, options)
+      } catch (_error) {
+        ModalService.isModalVisible = false
+      }
 
       ModalService.isModalVisible = true
-
-      return this._modalRef.result
     }
 
     ModalService.isModalVisible = false
-    return null
   }
 
 }

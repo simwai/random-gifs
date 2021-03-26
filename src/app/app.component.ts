@@ -23,11 +23,7 @@ export class AppComponent {
     if (event.key === 'Enter') {
       console.log('triggered in apps component')
 
-      try {
-        await this._modalService.tryOpenModal()
-      } catch (_error){
-        ModalService.isModalVisible = false
-      }
+      await this._modalService.tryOpenModal()
     }
   }
 
@@ -47,11 +43,8 @@ export class AppComponent {
           // Up swipe
           if (direction[1] < 0) {
             console.log('swipe up')
-            try {
-              await this._modalService.tryOpenModal()
-            } catch (_error) {
-              ModalService.isModalVisible = false
-            }
+
+            await this._modalService.tryOpenModal()
           }
         } else if ((Math.abs(direction[0]) > 10 && (Math.abs(direction[1] * 3) < Math.abs(direction[0])))) { // Horizontal enough
           // Left swipe

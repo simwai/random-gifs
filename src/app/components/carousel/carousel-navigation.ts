@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input } from '@angular/core'
+import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core'
 import { setDynterval } from 'dynamic-interval'
 import { NgbCarouselConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
@@ -15,7 +15,7 @@ const defaultValues = require('../../default-values.json')
   providers: [NgbCarouselConfig],
 })
 
-export class CarouselNavigationComponent implements AfterViewInit {
+export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('carousel') public carousel: any
 
   @LocalStorage('interval')
@@ -49,7 +49,6 @@ export class CarouselNavigationComponent implements AfterViewInit {
     return this._keyword ?? defaultValues.keyword
   }
 
-
   @LocalStorage()
   public fontColor: string
 
@@ -59,13 +58,15 @@ export class CarouselNavigationComponent implements AfterViewInit {
   private _offset = 0
   private _gifAmount = 10
 
+  private _dynterval
+
   constructor(private _giphyService: GiphyService, private _modalService: ModalService) {
     this.fetchGifs()
 
     // TODO maybe 10000 is not correct, could depend on view duration
     const config = { wait: 10000 }
 
-    setDynterval(context => {
+    this._dynterval = setDynterval(context => {
       this.fetchGifs()
 
       return { ...context, wait: 10000 }
@@ -74,6 +75,7 @@ export class CarouselNavigationComponent implements AfterViewInit {
 
   public fetchGifs(): void {
     this._giphyService.getGif(this.keyword, this._gifAmount, this._offset).subscribe(response => {
+      // TODO do this at modal close
       if (this._lastKeyword !== this.keyword) {
         this.images = []
       }
@@ -103,8 +105,8 @@ export class CarouselNavigationComponent implements AfterViewInit {
     this.carousel.prev()
   }
 
-  public async openModal(): Promise<NgbModalRef> {
-    return this._modalService.tryOpenModal()
+  public async openModal(): Promise<void> {
+    await this._modalService.tryOpenModal()
   }
 
   public ngAfterViewInit(): void {
@@ -117,7 +119,11 @@ export class CarouselNavigationComponent implements AfterViewInit {
       this.carousel.showNavigationIndicators = false
       this.carousel.showNavigationArrows = false
     }
+  }
 
-    // this.carousel.focus()
+  public ngOnDestroy(): void {
+    if (this._dynterval) {
+      clearInterval(this._dynterval)
+    }
   }
 }
