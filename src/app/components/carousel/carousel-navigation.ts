@@ -3,10 +3,9 @@ import { setDynterval } from 'dynamic-interval'
 import { NgbCarouselConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
 
-import { GiphyService } from '../../services/giphy.service'
+import { environment } from 'src/environments/environment'
+import { GiphyService } from 'src/app/services/giphy.service'
 import { ModalService } from 'src/app/services/modal.service'
-
-const defaultValues = require('../../default-values.json')
 
 @Component({
   selector: 'carousel-navigation',
@@ -22,7 +21,7 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
   private _interval: number
 
   public get interval(): number {
-    return this._interval ?? defaultValues.interval
+    return this._interval ?? environment.interval
   }
 
   public set interval(value) {
@@ -33,7 +32,7 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
   private _bgColor: string
 
   public get bgColor(): string {
-    return this._bgColor ?? defaultValues.bgColor
+    return this._bgColor ?? environment.bgColor
   }
 
   public set bgColor(value: string) {
@@ -46,7 +45,7 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
 
 
   public get keyword(): string {
-    return this._keyword ?? defaultValues.keyword
+    return this._keyword ?? environment.keyword
   }
 
   @LocalStorage()
@@ -123,7 +122,7 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
 
   public ngOnDestroy(): void {
     if (this._dynterval) {
-      clearInterval(this._dynterval)
+      this._dynterval.clear()
     }
   }
 }

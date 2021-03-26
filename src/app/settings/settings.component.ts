@@ -2,7 +2,7 @@ import { Component, HostListener, Input } from '@angular/core'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
 
-const defaultValues = require('../default-values.json')
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'settings',
@@ -16,7 +16,7 @@ export class SettingsComponent {
   private _keyword: string
 
   public get keyword(): string {
-    return this._keyword ?? defaultValues.keyword
+    return this._keyword ?? environment.keyword
   }
 
   @Input() public set keyword(value) {
@@ -27,7 +27,7 @@ export class SettingsComponent {
   private _interval: number
 
   public get interval(): number {
-    return this._interval ?? defaultValues.interval
+    return this._interval ?? environment.interval
   }
 
   @Input() public set interval(value) {
@@ -41,7 +41,7 @@ export class SettingsComponent {
   private _bgColor: string
 
   public get bgColor(): string {
-    return this._bgColor ?? defaultValues.bgColor
+    return this._bgColor ?? environment.bgColor
   }
 
   @Input() public set bgColor(value) {
@@ -51,7 +51,7 @@ export class SettingsComponent {
   }
 
   public get fontColor(): string {
-    return this._fontColor ?? defaultValues.fontColor
+    return this._fontColor ?? environment.fontColor
   }
 
  // TODO put this in utility class

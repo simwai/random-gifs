@@ -18,5 +18,5 @@ module.exports = {
     "selector-type-no-unknown": null,
     "declaration-colon-space-after": "always",
   },
-  ignoreFiles: ["node_modules/*.scss"]
+  ignoreFiles: ["node_modules/*.scss", "dist/*"]
 }
