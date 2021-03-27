@@ -12,7 +12,8 @@ export class ModalService {
 
   private readonly ngbModalOptions = {
     centered: true,
-    size: 'sm'
+    size: 'sm',
+    animation: false
   }
 
   constructor(private _modal: NgbModal) { }

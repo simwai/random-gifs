@@ -7,6 +7,7 @@
     "build": "ng build",
     "test": "ng test",
     "e2e": "ng e2e",
+    "lint": "ng lint random-gifs --typeCheck=true --tslintConfig=tslint.json --tsConfig=tsconfig.json",
     "tslint-fix": "tslint --project tsconfig.json src/**/*.ts --fix",
     "stylelint": "stylelint src/**/*.scss",
     "stylelint-fix": "stylelint src/**/*.scss --fix"
