@@ -2,7 +2,6 @@ import { CarouselNavigationComponent } from './components/carousel/carousel-navi
 import { Component, HostListener, ViewChild } from '@angular/core'
 
 import { ModalService } from './services/modal.service'
-import { NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 
 @Component({
   selector: 'app-root',

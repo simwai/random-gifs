@@ -23,6 +23,7 @@
     "@angular/platform-browser": "~11.2.6",
     "@angular/platform-browser-dynamic": "~11.2.6",
     "@ng-bootstrap/ng-bootstrap": "^9.1.0",
+    "angular-shepherd": "^11.0.0",
     "bootstrap": "^4.6.0",
     "dynamic-interval": "^1.2.1",
     "i": "^0.3.6",

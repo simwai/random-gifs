@@ -6,6 +6,8 @@ import { LocalStorage } from 'ngx-webstorage'
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
 import { ModalService } from 'src/app/services/modal.service'
+import { ShepherdService } from 'angular-shepherd'
+import { shepherdConfig } from './shepherd-config.js'
 
 @Component({
   selector: 'carousel-navigation',
@@ -59,7 +61,7 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
 
   private _dynterval
 
-  constructor(private _giphyService: GiphyService, private _modalService: ModalService) {
+  constructor(private _giphyService: GiphyService, private _modalService: ModalService, private _shepherdService: ShepherdService) {
     this.fetchGifs()
 
     // TODO maybe 10000 is not correct, could depend on view duration
@@ -118,6 +120,12 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
       this.carousel.showNavigationIndicators = false
       this.carousel.showNavigationArrows = false
     }
+
+    this._shepherdService.defaultStepOptions = shepherdConfig.defaultStepOptions
+    this._shepherdService.modal = true
+    this._shepherdService.confirmCancel = false
+    this._shepherdService.addSteps(shepherdConfig.defaultSteps)
+    this._shepherdService.start()
   }
 
   public ngOnDestroy(): void {
