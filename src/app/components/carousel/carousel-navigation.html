@@ -13,9 +13,9 @@
       </ng-template>
     </ngb-carousel>
     </div>
-    <div [hidden]="images?.length != 0">
+    <ng-template *ngIf="images?.length != 0">
       <div [style.color]="fontColor" class="d-flex flex-column justify-content-center align-items-center">Keyword not found</div>
-    </div>
+    </ng-template>
   </div>
   <div class="d-flex flex-column justify-content-center align-items-center w-full height-20 bg-dark">
     <div id="bottom-half-side" class="d-flex flex-column align-items-start h-20 width-fit-content">
