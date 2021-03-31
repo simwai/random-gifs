@@ -53,10 +53,6 @@
       "trace"
     ],
     "no-empty": false,
-    // "no-inferrable-types": [
-    //   true,
-    //   "ignore-params"
-    // ],
     "no-non-null-assertion": true,
     "no-redundant-jsdoc": true,
     "no-switch-case-fall-through": true,
@@ -145,14 +141,11 @@
     "directive-selector": [
       true,
       "attribute",
-      "app",
       "camelCase"
     ],
     "component-selector": [
       true,
       "element"
-      // "app",
-      // "kebab-case"
     ]
   }
 }

@@ -7,11 +7,10 @@
   },
   "eslint.format.enable": false,
   "angular.experimental-ivy": true,
-  "tslint.enable": true,
-  "tslint.autoFixOnSave": true,
-  "tslint.alwaysShowStatus": true,
+  "tslint.jsEnable": true,
   "stylelint.enable": true,
   "css.validate": false,
   "less.validate": false,
   "scss.validate": false,
+  "typescript.format.enable": true
 }

@@ -45,8 +45,8 @@ export const shepherdConfig = {
       on: 'bottom'
     },
     buttons: buttons(states.settingsClick),
-    title: 'Welcome to Angular-Shepherd!',
-    text: ['Angular-Shepherd is a JavaScript library for guiding users through your Angular app.'],
+    title: 'Welcome to Random Gifs!',
+    text: ['Click on this button to see the settings modal.'],
     when: {
       show: setState(states.settingsClick),
       hide: setState(states.settingsAction)
@@ -70,8 +70,8 @@ export const shepherdConfig = {
       on: 'bottom'
     },
     buttons: buttons(states.previousGif),
-    title: 'Welcome to Angular-Shepherd!',
-    text: ['Angular-Shepherd is a JavaScript library for guiding users through your Angular app.'],
+    title: '',
+    text: [''],
     when: {
       show: setState(states.previousGif),
       hide: setState(states.previousGif)
