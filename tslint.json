@@ -1,4 +1,9 @@
 {
+  "linterOptions": {
+    "exclude": [
+      "**/Local/Temp/**"
+    ]
+  },
   "extends": "tslint:recommended",
   "rulesDirectory": [
     "codelyzer"

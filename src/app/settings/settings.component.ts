@@ -1,6 +1,6 @@
 import { Component, HostListener, Input } from '@angular/core'
 import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap'
-import { LocalStorage } from 'ngx-webstorage'
+import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
 import { StyleHelperService } from '../services/style-helper.service'
@@ -11,7 +11,11 @@ import { StyleHelperService } from '../services/style-helper.service'
   styleUrls: ['./settings.component.scss'],
 })
 export class SettingsComponent {
-  constructor(public activeModal: NgbActiveModal, private _styleHelperService: StyleHelperService) { }
+  constructor(
+    public activeModal: NgbActiveModal,
+    private _styleHelperService: StyleHelperService,
+    private _localStorageService: LocalStorageService
+  ) { }
 
   public get keyword(): string {
     return this._keyword ?? environment.keyword
@@ -29,15 +33,21 @@ export class SettingsComponent {
     this._interval = value
   }
 
-  private _bgColor: string
-
   public get bgColor(): string {
-    return this._bgColor ?? this._styleHelperService.getBgColorFromDocument()
+    return this._bgColor
   }
 
   @Input() public set bgColor(value) {
+    if (!value) {
+      return
+    }
+
     this._bgColor = value
+    // TODO make it possible to pass result of getContrast()
     this._styleHelperService.addColorsToDocument(value)
+    // TODO refactor localstorage names, put this maybe into addColorToDocument of stylehelper??
+    this._localStorageService.store('bgColor', value)
+    this._localStorageService.store('fontColor', this._styleHelperService.getContrast(value))
   }
 
   @LocalStorage('keyword')
@@ -45,6 +55,9 @@ export class SettingsComponent {
 
   @LocalStorage('interval')
   private _interval: number
+
+  @LocalStorage('bgColor')
+  private _bgColor: string
 
   @HostListener('document:keypress', ['$event'])
   public handleKeyboardEvent(event: KeyboardEvent): void {

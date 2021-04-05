@@ -13,7 +13,7 @@
   </div>
   <div class="form-group">
     <label for="intervalInput">Background Color</label><br>
-    <input [(colorPicker)]="bgColor" (colorPickerChange)="bgColor = $event" [cpOutputFormat]="'hex'" name="bgColorInput" placeholder="Enter background color" [value]="bgColor" />
+    <input [(colorPicker)]="bgColor" (colorPickerChange)="bgColor = $event" [cpOutputFormat]="'hex'" name="bgColorInput" [placeholder]="bgColor" [value]="bgColor" />
   </div>
 </form>
 </div>

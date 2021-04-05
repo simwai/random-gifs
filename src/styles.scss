@@ -3,3 +3,31 @@
 
 $default-font-color: black;
 $default-bg-color:floralwhite;
+
+.default-bg-color {
+  background-color: $default-bg-color;
+}
+
+.bg-color {
+  // get current bg color or if it doesn't exist the fallback value
+  background-color: var(--bg-color, $default-bg-color);
+}
+
+.font-color {
+  color: var(--font-color, $default-font-color);
+}
+
+// overwrite NgbCarousel style
+.carousel-inner {
+  position: unset !important;
+  width: 80vw !important;
+  height: 40vh !important;
+  overflow: unset !important;
+  display: flex;
+}
+
+.carousel-item > img:focus,
+.carousel-item,
+ngb-carousel {
+  outline: unset !important;
+}

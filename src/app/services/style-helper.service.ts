@@ -42,8 +42,7 @@ export class StyleHelperService {
     document.documentElement.style.setProperty('--bg-color', bgColor)
   }
 
-  public getBgColorFromDocument(): string {
-    return document.documentElement.style.getPropertyValue('--bg-color')
+  public getStyleValueFromDocument(property: string): string {
+    return document.documentElement.style.getPropertyValue(property)
   }
-
 }

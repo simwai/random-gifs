@@ -1,12 +1,13 @@
-import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core'
+import { Component, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core'
 import { animate, state, style, transition, trigger } from '@angular/animations'
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
 import { setDynterval } from 'dynamic-interval'
-import { LocalStorage } from 'ngx-webstorage'
+import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
 import { ModalService } from 'src/app/services/modal.service'
+import { StyleHelperService } from 'src/app/services/style-helper.service'
 
 @Component({
   selector: 'carousel-navigation',
@@ -32,7 +33,7 @@ import { ModalService } from 'src/app/services/modal.service'
     ])
   ]})
 
-export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
+export class CarouselNavigationComponent implements OnInit, AfterViewInit, OnDestroy {
   @ViewChild('carousel') public carousel: any
 
   public images: string[] = []
@@ -43,7 +44,12 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
 
   private _dynterval
 
-  constructor(private _giphyService: GiphyService, private _modalService: ModalService) {
+  constructor(
+    private _giphyService: GiphyService,
+    private _modalService: ModalService,
+    private _styleHelperService: StyleHelperService,
+    private _localStorageService: LocalStorageService
+  ) {
     this.fetchGifs()
 
     // TODO maybe 10000 is not correct, could depend on view duration
@@ -121,6 +127,17 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
     await this._modalService.tryOpenModal()
   }
 
+  public ngOnInit(): void {
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    // Add 'implements OnInit' to the class.
+
+    const bgColor = this._localStorageService.retrieve('bgColor')
+
+    if (bgColor) {
+      this._styleHelperService.addColorsToDocument(bgColor)
+    }
+  }
+
   public ngAfterViewInit(): void {
     // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
 
@@ -129,7 +146,7 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
       this.carousel.pauseOnHover = false
       this.carousel.pauseOnFocus = false
       this.carousel.showNavigationIndicators = false
-      this.carousel.showNavigationArrows = true
+      this.carousel.showNavigationArrows = false
     }
   }
 
