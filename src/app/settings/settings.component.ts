@@ -29,6 +29,7 @@ export class SettingsComponent {
     return this._interval ?? environment.interval
   }
 
+  // TODO change to ms and add min. 1s
   @Input() public set interval(value) {
     this._interval = value
   }

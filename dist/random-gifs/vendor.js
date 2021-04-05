@@ -4740,7 +4740,7 @@ function ngbAutoClose(zone, document, type, close, closed$, insideElements, igno
                 }
             };
             const escapes$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["fromEvent"])(document, 'keydown')
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(closed$), 
+                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(closed$),
             // tslint:disable-next-line:deprecation
             Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(e => e.which === Key.Escape), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["tap"])(e => e.preventDefault()));
             // we have to pre-calculate 'shouldCloseOnClick' on 'mousedown',
@@ -4785,9 +4785,9 @@ const ngbFocusTrap = (zone, element, stopFocusTrap$, refocusOnClick = false) => 
         const lastFocusedElement$ = Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["fromEvent"])(element, 'focusin').pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(stopFocusTrap$), Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["map"])(e => e.target));
         // 'tab' / 'shift+tab' stream
         Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["fromEvent"])(element, 'keydown')
-            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(stopFocusTrap$), 
+            .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(stopFocusTrap$),
         // tslint:disable:deprecation
-        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(e => e.which === Key.Tab), 
+        Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(e => e.which === Key.Tab),
         // tslint:enable:deprecation
         Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["withLatestFrom"])(lastFocusedElement$))
             .subscribe(([tabEvent, focusedElement]) => {
@@ -7895,7 +7895,7 @@ class NgbModalWindow {
         const { nativeElement } = this._elRef;
         this._zone.runOutsideAngular(() => {
             Object(rxjs__WEBPACK_IMPORTED_MODULE_2__["fromEvent"])(nativeElement, 'keydown')
-                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this._closed$), 
+                .pipe(Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["takeUntil"])(this._closed$),
             // tslint:disable-next-line:deprecation
             Object(rxjs_operators__WEBPACK_IMPORTED_MODULE_3__["filter"])(e => e.which === Key.Escape))
                 .subscribe(event => {
@@ -32137,7 +32137,7 @@ class NodeInjectorFactory {
     /**
      * Factory to invoke in order to create a new instance.
      */
-    factory, 
+    factory,
     /**
      * Set to `true` if the token is declared in `viewProviders` (or if it is component).
      */
@@ -33074,7 +33074,7 @@ function bloomHashBitOrFactory(token) {
     if (typeof token === 'string') {
         return token.charCodeAt(0) || 0;
     }
-    const tokenId = 
+    const tokenId =
     // First check with `hasOwnProperty` so we don't get an inherited ID.
     token.hasOwnProperty(NG_ELEMENT_ID) ? token[NG_ELEMENT_ID] : undefined;
     // Negative token IDs are used for special objects such as `Injector`
@@ -34377,7 +34377,7 @@ makeParamDecorator('Inject', ɵ0$3), -1 /* Inject */);
  * @Annotation
  * @publicApi
  */
-const Optional = 
+const Optional =
 // Disable tslint because `InternalInjectFlags` is a const enum which gets inlined.
 // tslint:disable-next-line: no-toplevel-property-access
 attachInjectFlag(makeParamDecorator('Optional'), 8 /* Optional */);
@@ -34387,7 +34387,7 @@ attachInjectFlag(makeParamDecorator('Optional'), 8 /* Optional */);
  * @Annotation
  * @publicApi
  */
-const Self = 
+const Self =
 // Disable tslint because `InternalInjectFlags` is a const enum which gets inlined.
 // tslint:disable-next-line: no-toplevel-property-access
 attachInjectFlag(makeParamDecorator('Self'), 2 /* Self */);
@@ -34397,7 +34397,7 @@ attachInjectFlag(makeParamDecorator('Self'), 2 /* Self */);
  * @Annotation
  * @publicApi
  */
-const SkipSelf = 
+const SkipSelf =
 // Disable tslint because `InternalInjectFlags` is a const enum which gets inlined.
 // tslint:disable-next-line: no-toplevel-property-access
 attachInjectFlag(makeParamDecorator('SkipSelf'), 4 /* SkipSelf */);
@@ -34407,7 +34407,7 @@ attachInjectFlag(makeParamDecorator('SkipSelf'), 4 /* SkipSelf */);
  * @Annotation
  * @publicApi
  */
-const Host = 
+const Host =
 // Disable tslint because `InternalInjectFlags` is a const enum which gets inlined.
 // tslint:disable-next-line: no-toplevel-property-access
 attachInjectFlag(makeParamDecorator('Host'), 1 /* Host */);
@@ -40521,7 +40521,7 @@ function tick(component) {
  *
  * @publicApi
  */
-const INJECTOR$1 = new InjectionToken('INJECTOR', 
+const INJECTOR$1 = new InjectionToken('INJECTOR',
 // Dissable tslint because this is const enum which gets inlined not top level prop access.
 // tslint:disable-next-line: no-toplevel-property-access
 -1 /* Injector */);
@@ -41255,12 +41255,12 @@ function resolveToken(token, record, records, parent, notFoundValue, flags) {
                     const childRecord = options & 2 /* CheckSelf */ ? records.get(depRecord.token) : undefined;
                     deps.push(tryResolveToken(
                     // Current Token to resolve
-                    depRecord.token, 
+                    depRecord.token,
                     // A record which describes how to resolve the token.
                     // If undefined, this means we don't have such a record
-                    childRecord, 
+                    childRecord,
                     // Other records we know about.
-                    records, 
+                    records,
                     // If we don't know how to resolve dependency and we should not check parent for it,
                     // than pass in Null injector.
                     !childRecord && !(options & 4 /* CheckParent */) ? Injector.NULL : parent, options & 1 /* Optional */ ? null : Injector.THROW_IF_NOT_FOUND, InjectFlags.Default));
@@ -43623,7 +43623,7 @@ class ResolvedReflectiveFactory {
     /**
      * Factory function which can return an instance of an object represented by a key.
      */
-    factory, 
+    factory,
     /**
      * Arguments (dependencies) to the `factory` function.
      */
@@ -44333,7 +44333,7 @@ function logUnknownElementError(tView, element, tNode, hasDirectives) {
         // The element is unknown if it's an instance of HTMLUnknownElement or it isn't registered
         // as a custom element. Note that unknown elements with a dash in their name won't be instances
         // of HTMLUnknownElement in browsers that support web components.
-        const isUnknown = 
+        const isUnknown =
         // Note that we can't check for `typeof HTMLUnknownElement === 'function'`,
         // because while most browsers return 'function', IE returns 'object'.
         (typeof HTMLUnknownElement !== 'undefined' && HTMLUnknownElement &&
@@ -51982,7 +51982,7 @@ class ViewRef {
      *
      * @internal
      */
-    _lView, 
+    _lView,
     /**
      * This represents the `LView` associated with the point where `ChangeDetectorRef` was
      * requested.
@@ -57187,7 +57187,7 @@ const SWITCH_COMPILE_PIPE = SWITCH_COMPILE_PIPE__POST_R3__;
  * Use of this source code is governed by an MIT-style license that can be
  * found in the LICENSE file at https://angular.io/license
  */
-const ɵ0$e = (ngModule) => ngModule, ɵ1$3 = 
+const ɵ0$e = (ngModule) => ngModule, ɵ1$3 =
 /**
  * Decorator that marks the following class as an NgModule, and supplies
  * configuration metadata for it.
