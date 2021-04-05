@@ -8,7 +8,7 @@ module.exports = {
   rules: {
     "at-rule-no-unknown": null,
     "scss/at-rule-no-unknown": true,
-    "scss/dollar-variable-pattern": "^foo",
+    "scss/dollar-variable-pattern": null,
     "scss/selector-no-redundant-nesting-selector": true,
     "max-empty-lines": 2,
     "indentation": 2,

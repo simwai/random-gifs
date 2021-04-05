@@ -1,9 +1,7 @@
-// @use "sass:map";
+@import "~bootstrap/scss/bootstrap";
+@import "src/styles.scss";
 
-/* /deep/ .carousel-item.active > img {
-        border: 0.15em solid black;
-        box-shadow: inset 0px 0px 6px 0px rgba(0,0,0,0.6);
-      } */
+$carousel-control-color: var(--font-color, $default-font-color);
 
 ::ng-deep .carousel-inner {
   position: unset !important;
@@ -19,6 +17,14 @@ ngb-carousel {
   outline: unset !important;
 }
 
+.bg-color {
+  background-color: var(--bg-color, $default-bg-color);
+}
+
+.font-color {
+  color: var(--font-color, $default-font-color)
+}
+
 .fixed-top-right {
   top: 0;
   right: 0;
@@ -28,28 +34,26 @@ ngb-carousel {
   height: 50vh;
 }
 
+.height-2 {
+  height: 2vh;
+}
+
 .height-80 {
   height: 80vh;
 }
 
-// @media only screen and (max-width: --breakpoint-md) {
-//   .md-height-80 {
-//     height: 80vh;
-//   }
-// }
+.height-18 {
+  height: 18vh;
+}
 
-// .lg-vh-100 {
-//   height: 100vh;
-// }
+@media only screen and (max-width: map-get($grid-breakpoints, "md")) {
+  .height-80 {
+    height: 60vh;
+  }
 
-// @media only screen and (min-width: --breakpoint-md) {
-//   .lg-vh-100 {
-//     height: 100vh;
-//   }
-// }
-
-.height-20 {
-  height: 30vh;
+  .md-height-38 {
+    height: 38vh;
+  }
 }
 
 .width-fit-content {
@@ -87,4 +91,24 @@ ngb-carousel {
 
 .hover-settings:hover {
   cursor: pointer;
+}
+
+#settings-click > svg {
+  fill: var(--font-color);
+}
+
+.border-radius {
+  border-radius: 0.3rem;
+}
+
+.btn-outline-black {
+  @extend .btn-outline-dark;
+}
+
+.btn-outline-white {
+  @extend .btn-outline-light;
+
+  &:hover {
+    background-color: $dark;
+  }
 }

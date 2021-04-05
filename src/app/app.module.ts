@@ -6,24 +6,29 @@ import { CarouselNavigationModule } from './components/carousel/carousel-navigat
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap'
 import { ColorPickerModule } from 'ngx-color-picker'
 import { NgxWebstorageModule } from 'ngx-webstorage'
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 
 import { AppComponent } from './app.component'
 import { SettingsComponent } from './settings/settings.component'
+import { ColorPickerComponent } from './components/color-picker/color-picker.component'
+import { CommonModule } from '@angular/common'
 
 @NgModule({
    declarations: [
       AppComponent,
-      SettingsComponent
+      SettingsComponent,
+      ColorPickerComponent
    ],
    imports: [
       BrowserModule,
+      BrowserAnimationsModule,
       FormsModule,
       HttpClientModule,
       CarouselNavigationModule,
       ColorPickerModule,
       NgxWebstorageModule.forRoot(),
       NgbModule
-   ],
+    ],
    bootstrap: [
       AppComponent
    ]

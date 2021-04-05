@@ -1,23 +1,60 @@
-import { Component, ViewChild, AfterViewInit, Output, EventEmitter, Input, OnDestroy } from '@angular/core'
+import { Component, ViewChild, AfterViewInit, OnDestroy } from '@angular/core'
+import { animate, state, style, transition, trigger } from '@angular/animations'
+import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
 import { setDynterval } from 'dynamic-interval'
-import { NgbCarouselConfig, NgbModalRef } from '@ng-bootstrap/ng-bootstrap'
 import { LocalStorage } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
 import { ModalService } from 'src/app/services/modal.service'
-import { ShepherdService } from 'angular-shepherd'
-import { shepherdConfig } from './shepherd-config.js'
 
 @Component({
   selector: 'carousel-navigation',
   templateUrl: './carousel-navigation.html',
   styleUrls: ['./carousel-navigation.scss'],
-  providers: [NgbCarouselConfig],
-})
+  providers: [
+    NgbCarouselConfig
+  ],
+  animations: [
+    trigger('slideDown', [
+      // element which slides down is open
+      state('opened', style({  })),
+
+      // element which slides down is closed
+      state('closed', style({ transform: 'translateY(150%)' })),
+
+      transition('opened => closed', [
+        animate('1s'),
+      ]),
+      transition('closed => opened', [
+        animate('1s')
+      ])
+    ])
+  ]})
 
 export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
   @ViewChild('carousel') public carousel: any
+
+  public images: string[] = []
+
+  private _lastKeyword: string
+  private _offset = 0
+  private _gifAmount = 10
+
+  private _dynterval
+
+  constructor(private _giphyService: GiphyService, private _modalService: ModalService) {
+    this.fetchGifs()
+
+    // TODO maybe 10000 is not correct, could depend on view duration
+    const config = { wait: 10000 }
+
+    this._dynterval = setDynterval(context => {
+      this.fetchGifs()
+
+      return { ...context, wait: 10000 }
+    }, config)
+  }
 
   @LocalStorage('interval')
   private _interval: number
@@ -30,48 +67,22 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
     this._interval = value
   }
 
-  @LocalStorage('bgColor')
-  private _bgColor: string
-
-  public get bgColor(): string {
-    return this._bgColor ?? environment.bgColor
-  }
-
-  public set bgColor(value: string) {
-    this._bgColor = value
-  }
-
-
   @LocalStorage('keyword')
   private _keyword: string
-
 
   public get keyword(): string {
     return this._keyword ?? environment.keyword
   }
 
-  @LocalStorage()
-  public fontColor: string
+  @LocalStorage('controlGuideShown')
+  private _controlGuideShown: boolean
 
-  public images: string[] = []
+  public get controlGuideShown(): boolean {
+    return this._controlGuideShown ?? true
+  }
 
-  private _lastKeyword: string
-  private _offset = 0
-  private _gifAmount = 10
-
-  private _dynterval
-
-  constructor(private _giphyService: GiphyService, private _modalService: ModalService, private _shepherdService: ShepherdService) {
-    this.fetchGifs()
-
-    // TODO maybe 10000 is not correct, could depend on view duration
-    const config = { wait: 10000 }
-
-    this._dynterval = setDynterval(context => {
-      this.fetchGifs()
-
-      return { ...context, wait: 10000 }
-    }, config)
+  public set controlGuideShown(value: boolean) {
+    this._controlGuideShown = value
   }
 
   public fetchGifs(): void {
@@ -118,14 +129,8 @@ export class CarouselNavigationComponent implements AfterViewInit, OnDestroy {
       this.carousel.pauseOnHover = false
       this.carousel.pauseOnFocus = false
       this.carousel.showNavigationIndicators = false
-      this.carousel.showNavigationArrows = false
+      this.carousel.showNavigationArrows = true
     }
-
-    this._shepherdService.defaultStepOptions = shepherdConfig.defaultStepOptions
-    this._shepherdService.modal = true
-    this._shepherdService.confirmCancel = false
-    this._shepherdService.addSteps(shepherdConfig.defaultSteps)
-    this._shepherdService.start()
   }
 
   public ngOnDestroy(): void {
