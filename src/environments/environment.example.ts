@@ -4,7 +4,7 @@
 
 export const environment = {
   production: false,
-  giphyApiKey: 'alöksdjfölsdkjflöasdf',
+  giphyApiKey: 'IrZnBFnDUpGEBOOiSiYLu9tC0GHc2yjk',
   interval: 5000,
   keyword: 'cat'
 }
