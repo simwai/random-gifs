@@ -1,47 +1,12 @@
 @import "~bootstrap/scss/bootstrap";
 @import "src/styles.scss";
 
-.fixed-top-right {
-  top: 0;
-  right: 0;
-}
-
-.half-height {
-  height: 50vh;
-}
-
-.height-2 {
-  height: 2vh;
-}
-
-.height-80 {
-  height: 80vh;
-}
-
-.height-18 {
-  height: 18vh;
-}
-
-@media only screen and (max-width: map-get($grid-breakpoints, "md")) {
-  .height-80 {
-    height: 60vh;
-  }
-
-  .md-height-38 {
-    height: 38vh;
-  }
-}
-
-.width-fit-content {
-  width: fit-content;
-}
-
-.object-fit-contain-img {
-  object-fit: contain;
-  width: 100%;
-  max-height: 100%;
-  height: auto;
-}
+// .object-fit-contain-img {
+//   object-fit: contain;
+//   width: 100%;
+//   max-height: 100%;
+//   height: auto;
+// }
 
 .svg-icon {
   width: 3rem;
@@ -71,10 +36,6 @@
 
 #settings-click > svg {
   fill: var(--font-color);
-}
-
-.border-radius {
-  border-radius: 0.3rem;
 }
 
 .btn-outline-black {

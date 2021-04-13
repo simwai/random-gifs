@@ -13,4 +13,5 @@
   "less.validate": false,
   "scss.validate": false,
   "typescript.format.enable": true,
+  "git.ignoreLimitWarning": true,
 }

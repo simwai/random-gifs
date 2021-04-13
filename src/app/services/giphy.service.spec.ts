@@ -2,7 +2,7 @@ import { TestBed } from '@angular/core/testing'
 
 import { GiphyService } from './giphy.service'
 
-describe('ModalServiceService', () => {
+describe('GiphyService', () => {
   let service: GiphyService
 
   beforeEach(() => {

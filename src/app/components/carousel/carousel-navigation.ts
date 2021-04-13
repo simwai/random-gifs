@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, OnDestroy, OnInit } from '@angular/core'
+import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core'
 import { animate, state, style, transition, trigger } from '@angular/animations'
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
 import { setDynterval } from 'dynamic-interval'
@@ -6,8 +6,6 @@ import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
-import { ModalService } from 'src/app/services/modal.service'
-import { StyleHelperService } from 'src/app/services/style-helper.service'
 
 @Component({
   selector: 'carousel-navigation',
@@ -16,6 +14,9 @@ import { StyleHelperService } from 'src/app/services/style-helper.service'
   providers: [
     NgbCarouselConfig
   ],
+  host: {
+    class: 'h-100 flex flex-col justify-center items-center'
+  },
   animations: [
     trigger('slideDown', [
       // element which slides down is open
@@ -33,7 +34,7 @@ import { StyleHelperService } from 'src/app/services/style-helper.service'
     ])
   ]})
 
-export class CarouselNavigationComponent implements OnInit, AfterViewInit, OnDestroy {
+export class CarouselNavigationComponent implements OnDestroy, OnInit {
   @ViewChild('carousel') public carousel: any
 
   public images: string[] = []
@@ -46,8 +47,6 @@ export class CarouselNavigationComponent implements OnInit, AfterViewInit, OnDes
 
   constructor(
     private _giphyService: GiphyService,
-    private _modalService: ModalService,
-    private _styleHelperService: StyleHelperService,
     private _localStorageService: LocalStorageService
   ) {
     this.fetchGifs()
@@ -80,20 +79,8 @@ export class CarouselNavigationComponent implements OnInit, AfterViewInit, OnDes
     return this._keyword ?? environment.keyword
   }
 
-  @LocalStorage('controlGuideShown')
-  private _controlGuideShown: boolean
-
-  public get controlGuideShown(): boolean {
-    return this._controlGuideShown ?? true
-  }
-
-  public set controlGuideShown(value: boolean) {
-    this._controlGuideShown = value
-  }
-
   public fetchGifs(): void {
     this._giphyService.getGif(this.keyword, this._gifAmount, this._offset).subscribe(response => {
-      // TODO do this at modal close
       if (this._lastKeyword !== this.keyword) {
         this.images = []
       }
@@ -123,9 +110,9 @@ export class CarouselNavigationComponent implements OnInit, AfterViewInit, OnDes
     this.carousel.prev()
   }
 
-  public async openModal(): Promise<void> {
-    await this._modalService.tryOpenModal()
-  }
+  public showGuide(): void { }
+
+  public showSettings(): void { }
 
   public ngOnInit(): void {
     // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
@@ -134,19 +121,7 @@ export class CarouselNavigationComponent implements OnInit, AfterViewInit, OnDes
     const bgColor = this._localStorageService.retrieve('bgColor')
 
     if (bgColor) {
-      this._styleHelperService.addColorsToDocument(bgColor)
-    }
-  }
-
-  public ngAfterViewInit(): void {
-    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-
-    if (this.carousel) {
-      this.carousel.animation = false
-      this.carousel.pauseOnHover = false
-      this.carousel.pauseOnFocus = false
-      this.carousel.showNavigationIndicators = false
-      this.carousel.showNavigationArrows = false
+      document.documentElement.style.setProperty('--bg-color', bgColor)
     }
   }
 

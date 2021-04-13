@@ -1,0 +1,15 @@
+<div class="flex flex-col h-100 gap-y-12">
+  <div class="flex flex-col pt-20"><h1>Settings</h1></div>
+  <div class="flex flex-col">
+    <div class="form-group">
+      <label for="keywordInput">Gif View Duration (in s)</label><br>
+      <input [(ngModel)]="interval" name="intervalInput" type="text" placeholder="Enter gif view duration" />
+    </div>
+  </div>
+  <div class="flex flex-col">
+    <div class="form-group">
+      <color-picker></color-picker>
+    </div>
+  </div>
+  <div class="flex flex-col"></div>
+</div>

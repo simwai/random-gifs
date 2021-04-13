@@ -1,33 +1,76 @@
-/* Importing Bootstrap SCSS file. */
 @import "~bootstrap/scss/bootstrap";
 
-$default-font-color: black;
-$default-bg-color:floralwhite;
+@import "tailwindcss/base";
+@import "tailwindcss/components";
+@import "tailwindcss/utilities";
 
-.default-bg-color {
-  background-color: $default-bg-color;
+@import "@fontsource/roboto";
+@import "@fontsource/montserrat";
+
+* {
+  user-select: none;
 }
 
-.bg-color {
-  // get current bg color or if it doesn't exist the fallback value
-  background-color: var(--bg-color, $default-bg-color);
+body {
+  color: theme("colors.grey");
+  background-color: theme("colors.dark-grey");
+  font-family: Roboto, sans-serif;
 }
 
-.font-color {
-  color: var(--font-color, $default-font-color);
+h1 {
+  font-family: Montserrat, sans-serif;
+  font-size: theme("fontSize.lg");
 }
 
-// overwrite NgbCarousel style
-.carousel-inner {
-  position: unset !important;
-  width: 80vw !important;
-  height: 40vh !important;
-  overflow: unset !important;
-  display: flex;
+input {
+  @extend .short-shadow;
+
+  background: theme("colors.dark-grey");
+  background-color: theme("colors.darker-grey");
+  border-radius: theme("borderRadius.xl");
+  text-align: center;
+  height: theme("height.10");
+  color: theme("colors.grey");
+  border: 2px solid theme("colors.darker-grey");
+}
+
+button {
+  @extend .short-shadow;
+
+  outline: none;
+  background-color: theme("colors.darker-grey");
+  border-radius: 12px;
+  padding: 6px 9px;
+  border: 2px solid theme("colors.darker-grey");
+}
+
+input:hover,
+button:hover {
+  border-style: solid;
+  border-width: 2px;
+  border-color: var(--bg-color, theme("colors.grey"));
+}
+
+.short-shadow {
+  box-shadow: 0 1px 1px rgba(0,0,0,0.11),
+    0 2px 2px rgba(0,0,0,0.11),
+    0 4px 4px rgba(0,0,0,0.11),
+    0 6px 8px rgba(0,0,0,0.11),
+    0 8px 16px rgba(0,0,0,0.11);
+}
+
+.width-fit-content {
+  width: fit-content;
+}
+
+img {
+  object-fit: contain;
 }
 
 .carousel-item > img:focus,
 .carousel-item,
-ngb-carousel {
+ngb-carousel,
+svg-icon:focus,
+input:focus {
   outline: unset !important;
 }

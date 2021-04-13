@@ -1,7 +1,5 @@
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
-import { Component, HostListener, ViewChild } from '@angular/core'
-
-import { ModalService } from './services/modal.service'
+import { Component, ComponentRef, HostListener, Input, ViewChild } from '@angular/core'
 
 @Component({
   selector: 'app-root',
@@ -10,25 +8,22 @@ import { ModalService } from './services/modal.service'
 })
 export class AppComponent {
   // {static: false } is default
-  @ViewChild(CarouselNavigationComponent) public carouselNav: CarouselNavigationComponent
+  @ViewChild('carousel') public carouselNav: CarouselNavigationComponent
+
+  @Input() public isAlternative: boolean
 
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
-  constructor(private _modalService: ModalService) { }
+  constructor() { }
 
-  @HostListener('document:keypress', ['$event'])
-  public async handleKeyboardEvent(event: KeyboardEvent): Promise<void> {
-    if (event.key === 'Enter') {
-      console.log('triggered in apps component')
-
-      await this._modalService.tryOpenModal()
-    }
-  }
-
-  public async swipe(e: TouchEvent, when: string): Promise<void> {
-    const coord: [number, number] = [e.changedTouches[0].clientX, e.changedTouches[0].clientY]
+  public async swipe(event: TouchEvent, when: string): Promise<void> {
+    const coord: [number, number] = [event.changedTouches[0].clientX, event.changedTouches[0].clientY]
     const time = new Date().getTime()
+
+    if (!this.carouselNav) {
+      return
+    }
 
     if (when === 'start') {
       this._swipeCoord = coord
@@ -38,14 +33,7 @@ export class AppComponent {
       const duration = time - this._swipeTime
 
       if (duration < 1000) { // Long enough
-        if ((Math.abs(direction[0]) > 10  && (Math.abs(direction[0] * 3) < Math.abs(direction[1])))) { // Vertical enough
-          // Up swipe
-          if (direction[1] < 0) {
-            console.log('swipe up')
-
-            await this._modalService.tryOpenModal()
-          }
-        } else if ((Math.abs(direction[0]) > 10 && (Math.abs(direction[1] * 3) < Math.abs(direction[0])))) { // Horizontal enough
+        if ((Math.abs(direction[0]) > 10 && (Math.abs(direction[1] * 3) < Math.abs(direction[0])))) { // Horizontal enough
           // Left swipe
           if (direction[0] < 0) {
             console.log('left swipe')
@@ -62,5 +50,9 @@ export class AppComponent {
         }
       }
     }
+  }
+
+  public onActivate(event): void {
+    this.carouselNav = event
   }
 }
