@@ -2,7 +2,14 @@
   <div>Accent Color Picker</div>
   <div class="flex flex-row gap-x-4">
     <div *ngFor="let color of colors">
-      <div class="color-item cursor-pointer" [style.backgroundColor]="color" (click)="saveAccentColor($event)"></div>
+      <div #colorItem
+           class="color-item cursor-pointer"
+           [style.backgroundColor]="color"
+           (click)="saveAccentColor($event)"
+           [class]="
+           bgColor === this.rgbStringToHexCode(this.colorItem.style.backgroundColor)
+           ? 'active-color-item' : ''">
+    </div>
     </div>
   </div>
 </div>

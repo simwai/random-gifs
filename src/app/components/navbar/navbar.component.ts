@@ -1,6 +1,6 @@
-import { Component, Input } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
-import { LocalStorage } from 'ngx-webstorage'
+import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
 
@@ -9,7 +9,7 @@ import { environment } from 'src/environments/environment'
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent{
+export class NavbarComponent implements OnInit {
   @LocalStorage('keyword')
   private _keyword: string
 
@@ -21,7 +21,8 @@ export class NavbarComponent{
     this._keyword = value
   }
 
-  constructor(private _router: Router) { }
+  constructor(private _router: Router,
+              private _localStorageService: LocalStorageService) { }
 
   public isAlternative(): boolean {
     const currentPage = this._router.url
@@ -40,4 +41,16 @@ export class NavbarComponent{
 
     return false
   }
+
+  public ngOnInit(): void {
+    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
+    // Add 'implements OnInit' to the class.
+
+    const bgColor = this._localStorageService.retrieve('bgColor')
+
+    if (bgColor) {
+      document.documentElement.style.setProperty('--bg-color', bgColor)
+    }
+  }
 }
+

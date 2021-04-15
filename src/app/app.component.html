@@ -3,12 +3,12 @@
     <div class="flex flex-row h-1/6 items-center justify-center w-100">
       <navbar class="width-10"></navbar>
     </div>
-    <div class="flex flex-row h-4/6 items-center justify-center w-100">
+    <div class="flex flex-row h-4/6 items-center justify-center w-100 overflow-hidden" [@routeAnimations]="prepareRoute(outlet)">
       <!-- activate gives me a component reference in order to use it -->
-      <router-outlet (activate)="onActivate($event)"></router-outlet>
+      <router-outlet #outlet="outlet" (activate)="onActivate($event)"></router-outlet>
     </div>
     <div class="flex flex-row h-1/6 items-center justify-center w-100">
-      <div class="pr-2">Made with love by simwai</div>
+      <div class="pr-2 color-hover">Made with love by simwai</div>
       <a href="https://github.com/simwai" class="flex"><svg-icon key="github" fontSize="20px"></svg-icon></a>
     </div>
     <!-- <div class="flex flex-row md:hidden justify-center items-center"></div> -->

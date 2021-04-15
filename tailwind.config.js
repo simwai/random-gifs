@@ -10,7 +10,14 @@ module.exports = {
       },
       maxWidth: {
         "1/3-vw": 100 / 3 + "vw",
-        "80-vw": "80vw"
+        "80-vw": "80vw",
+        "120-px": "120px"
+      },
+      width: {
+        "70-vw": "70vw"
+      },
+      height: {
+        "70-vh": "70vh"
       }
     },
     colors: {

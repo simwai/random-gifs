@@ -15,11 +15,13 @@ body {
   color: theme("colors.grey");
   background-color: theme("colors.dark-grey");
   font-family: Roboto, sans-serif;
+  font-size: theme("fontSize.lg");
 }
 
 h1 {
+  font-weight: theme("fontWeight.bold");
   font-family: Montserrat, sans-serif;
-  font-size: theme("fontSize.lg");
+  font-size: theme("fontSize.2xl");
 }
 
 input {
@@ -73,4 +75,8 @@ ngb-carousel,
 svg-icon:focus,
 input:focus {
   outline: unset !important;
+}
+
+.color-hover:hover, a:hover {
+  color: var(--bg-color);
 }

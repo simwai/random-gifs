@@ -15,12 +15,15 @@ export class SettingsComponent {
   constructor() { }
 
   public get interval(): number {
-    return this._interval ?? environment.interval
+    return this._interval / 1000 ?? environment.interval
   }
 
-  // TODO change to ms and add min. 1s
-  @Input() public set interval(value) {
-    this._interval = value
+  @Input() public set interval(value: number) {
+    if (/\d/g.test(value.toString())) {
+      this._interval = value * 1000
+    } else {
+      // TODO showError()
+    }
   }
 
   public get bgColor(): string {

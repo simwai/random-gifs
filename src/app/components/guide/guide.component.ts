@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component } from '@angular/core'
 
 @Component({
   selector: 'guide',
@@ -8,11 +8,8 @@ import { Component, OnInit } from '@angular/core'
     class: 'h-100'
   }
 })
-export class GuideComponent implements OnInit {
+export class GuideComponent {
 
   constructor() { }
-
-  public ngOnInit(): void {
-  }
 
 }

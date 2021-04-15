@@ -9,13 +9,13 @@
     <input type="text" class="w-2/3" placeholder="Search for a gif" [(ngModel)]="keyword">
     <!-- TODO add accent color -->
     <ng-container *ngTemplateOutlet="guide"></ng-container>
-    <svg-icon routerLink="/settings" key="cog" fontSize="40px" class="cursor-pointer"></svg-icon>
+    <svg-icon routerLink="/settings" key="cog" fontSize="40px" class="cursor-pointer color-hover"></svg-icon>
   </div>
 </ng-template>
 
 <ng-template #guide>
   <!-- <div class="pl-4"> -->
-    <svg-icon routerLink="/guide" key="head-question" fontSize="40px" class="cursor-pointer"></svg-icon>
+    <svg-icon routerLink="/guide" key="head-question" fontSize="40px" class="cursor-pointer color-hover"></svg-icon>
   <!-- </div> -->
 </ng-template>
 

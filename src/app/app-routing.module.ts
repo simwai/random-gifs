@@ -6,10 +6,10 @@ import { GuideComponent } from './components/guide/guide.component'
 import { SettingsComponent } from './components/settings/settings.component'
 
 const routes: Routes = [
-  { path: 'guide', component: GuideComponent},
-  { path: 'settings', component: SettingsComponent},
-  { path: 'carousel', component: CarouselNavigationComponent},
-  { path: '', redirectTo: '/carousel', pathMatch: 'full'},
+  { path: 'guide', component: GuideComponent, data: { animation: 'Guide' } },
+  { path: 'settings', component: SettingsComponent, data: { animation: 'Settings' } },
+  { path: 'carousel', component: CarouselNavigationComponent, data: { animation: 'Carousel' } },
+  { path: '', redirectTo: '/carousel', pathMatch: 'full' },
 ]
 
 @NgModule({

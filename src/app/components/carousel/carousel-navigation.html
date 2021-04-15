@@ -1,11 +1,11 @@
 
-<div class="flex flex-col md:flex-row justify-evenly items-center h-100">
+<div class="flex flex-col md:flex-row justify-evenly items-center h-100 w-70-vw">
   <div class="flex flex-col">
-    <div class="pr-5 cursor-pointer hidden md:flex">
-      <svg-icon key="arrow-left-bold-box" (click)="prev()" fontSize="10vw"></svg-icon>
+    <div class="pr-5 cursor-pointer hidden md:flex max-w-120-px">
+      <svg-icon key="arrow-left-bold-box" (click)="prev()" fontSize="4rem" [color]="bgColor"></svg-icon>
     </div>
   </div>
-  <div class="flex flex-col justify-content-center items-center max-w-80-vw md:max-h-40-vh md:max-w-1/3-vw">
+  <div class="flex flex-col justify-content-center items-center max-w-80-vw md:max-h-40-vh md:max-w-1/3-vw w-70-vw h-70-vh">
     <ng-container *ngIf="images.length !== 0; else keywordNotFound">
       <ngb-carousel
         #carousel
@@ -23,15 +23,15 @@
     </ng-container>
   </div>
     <div class="flex flex-row md:flex-col">
-      <div class="pl-5 cursor-pointer hidden md:flex">
-        <svg-icon key="arrow-right-bold-box" (click)="next()" fontSize="10vw"></svg-icon>
+      <div class="pl-5 cursor-pointer hidden md:flex max-w-120-px">
+        <svg-icon key="arrow-right-bold-box" (click)="next()" fontSize="4rem" [color]="bgColor"></svg-icon>
       </div>
 
       <div class="pr-5 cursor-pointer md:hidden inline-flex">
-        <svg-icon key="arrow-left-bold-box" (click)="prev()" fontSize="10vw"></svg-icon>
+        <svg-icon key="arrow-left-bold-box" (click)="prev()" fontSize="4rem" [color]="bgColor"></svg-icon>
       </div>
       <div class="cursor-pointer md:hidden inline-flex">
-        <svg-icon key="arrow-right-bold-box" (click)="next()" fontSize="10vw"></svg-icon>
+        <svg-icon key="arrow-right-bold-box" (click)="next()" fontSize="4rem" [color]="bgColor"></svg-icon>
       </div>
     </div>
   <ng-template #keywordNotFound>

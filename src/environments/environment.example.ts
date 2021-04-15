@@ -4,9 +4,10 @@
 
 export const environment = {
   production: false,
-  giphyApiKey: 'asdfagasgasdfasdiokfjsadkfj',
-  interval: 5000,
-  keyword: 'cat'
+  giphyApiKey: 'asdfasdfasdfasdf',
+  interval: 5,
+  keyword: 'cat',
+  iconBasePath: 'assets/svg/'
 }
 
 /*

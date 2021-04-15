@@ -1,10 +1,36 @@
+import { Component, Input, ViewChild } from '@angular/core'
+import { RouterOutlet } from '@angular/router'
+import { trigger, transition, style, query, animateChild, animate } from '@angular/animations'
+
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
-import { Component, ComponentRef, HostListener, Input, ViewChild } from '@angular/core'
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
+  animations: [
+    trigger('routeAnimations', [
+      transition('* => *', [
+        style({ position: 'relative' }),
+        query(':enter, :leave', [
+          style({
+            position: 'absolute',
+            transform: 'translateX(0)',
+            opacity: 0
+          })
+        ], { optional: true }),
+        query(':enter', animateChild(), { optional: true }),
+        query(':enter', [
+          animate('700ms ease-out'),
+          style({ opacity: 1 })
+        ], { optional: true }),
+        // query(':leave', animateChild()),
+        // query(':leave', [
+        //   animate('700ms ease-out'), style({ opacity: 1 })
+        // ])
+      ]),
+    ])
+  ],
 })
 export class AppComponent {
   // {static: false } is default
@@ -54,5 +80,12 @@ export class AppComponent {
 
   public onActivate(event): void {
     this.carouselNav = event
+  }
+
+  // Here, the prepareRoute() method takes the value of the outlet directive (established through #outlet="outlet") and returns
+  // a string value representing the state of the animation based on the custom data of the current active route.
+  // You can use this data to control which transition to execute for each route.
+  public prepareRoute(outlet: RouterOutlet): any {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
   }
 }

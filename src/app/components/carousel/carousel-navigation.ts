@@ -1,8 +1,8 @@
-import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core'
+import { Component, ViewChild, OnDestroy } from '@angular/core'
 import { animate, state, style, transition, trigger } from '@angular/animations'
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
 import { setDynterval } from 'dynamic-interval'
-import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
+import { LocalStorage } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
@@ -34,8 +34,12 @@ import { GiphyService } from 'src/app/services/giphy.service'
     ])
   ]})
 
-export class CarouselNavigationComponent implements OnDestroy, OnInit {
-  @ViewChild('carousel') public carousel: any
+export class CarouselNavigationComponent implements OnDestroy {
+  @LocalStorage('bgColor')
+  public bgColor: string
+
+  @ViewChild('carousel')
+  public carousel: any
 
   public images: string[] = []
 
@@ -45,10 +49,7 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
 
   private _dynterval
 
-  constructor(
-    private _giphyService: GiphyService,
-    private _localStorageService: LocalStorageService
-  ) {
+  constructor(private _giphyService: GiphyService) {
     this.fetchGifs()
 
     // TODO maybe 10000 is not correct, could depend on view duration
@@ -65,7 +66,7 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
   private _interval: number
 
   public get interval(): number {
-    return this._interval ?? environment.interval
+    return this._interval ?? environment.interval * 1000
   }
 
   public set interval(value) {
@@ -103,26 +104,15 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
   }
 
   public next(): void {
-    this.carousel.next()
+    try {
+      this.carousel.next()
+    } catch (_error) {  }
   }
 
   public prev(): void {
-    this.carousel.prev()
-  }
-
-  public showGuide(): void { }
-
-  public showSettings(): void { }
-
-  public ngOnInit(): void {
-    // Called after the constructor, initializing input properties, and the first call to ngOnChanges.
-    // Add 'implements OnInit' to the class.
-
-    const bgColor = this._localStorageService.retrieve('bgColor')
-
-    if (bgColor) {
-      document.documentElement.style.setProperty('--bg-color', bgColor)
-    }
+    try {
+      this.carousel.prev()
+    } catch (_error) {  }
   }
 
   public ngOnDestroy(): void {

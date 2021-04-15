@@ -1,14 +1,22 @@
 {
   "linterOptions": {
     "exclude": [
-      "**/Local/Temp/**"
+      "src/app/svg"
     ]
   },
-  "extends": "tslint:recommended",
+  "extends": [
+    "tslint:recommended",
+    "tslint-eslint-rules"
+  ],
   "rulesDirectory": [
     "codelyzer"
   ],
   "rules": {
+    "object-curly-spacing": true,
+    "array-bracket-spacing": [
+      true,
+     "never"
+    ],
     "align": {
       "options": [
         "parameters",
