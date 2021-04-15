@@ -1,4 +1,4 @@
-import { Component, ViewChild, OnDestroy } from '@angular/core'
+import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core'
 import { animate, state, style, transition, trigger } from '@angular/animations'
 import { NgbCarouselConfig } from '@ng-bootstrap/ng-bootstrap'
 import { setDynterval } from 'dynamic-interval'
@@ -34,7 +34,7 @@ import { GiphyService } from 'src/app/services/giphy.service'
     ])
   ]})
 
-export class CarouselNavigationComponent implements OnDestroy {
+export class CarouselNavigationComponent implements OnDestroy, OnInit {
   @LocalStorage('bgColor')
   public bgColor: string
 
@@ -49,18 +49,7 @@ export class CarouselNavigationComponent implements OnDestroy {
 
   private _dynterval
 
-  constructor(private _giphyService: GiphyService) {
-    this.fetchGifs()
-
-    // TODO maybe 10000 is not correct, could depend on view duration
-    const config = { wait: 10000 }
-
-    this._dynterval = setDynterval(context => {
-      this.fetchGifs()
-
-      return { ...context, wait: 10000 }
-    }, config)
-  }
+  constructor(private _giphyService: GiphyService) { }
 
   @LocalStorage('interval')
   private _interval: number
@@ -119,5 +108,18 @@ export class CarouselNavigationComponent implements OnDestroy {
     if (this._dynterval) {
       this._dynterval.clear()
     }
+  }
+
+  public ngOnInit(): void {
+    this.fetchGifs()
+
+    // TODO maybe 10000 is not correct, could depend on view duration
+    const config = { wait: 10000 }
+
+    this._dynterval = setDynterval(context => {
+      this.fetchGifs()
+
+      return { ...context, wait: 10000 }
+    }, config)
   }
 }
