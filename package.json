@@ -5,6 +5,8 @@
     "start": "ng serve",
     "start-4021": "ng serve -o --port 4201",
     "build": "ng build --prod && ng build --prod --base-href . --output-path ../cordova-app/www/",
+    "build-ng": "ng build --prod",
+    "build-cordova": "ng build --prod --base-href . --output-path ../cordova-app/www/",
     "test": "ng test",
     "e2e": "ng e2e",
     "lint": "ng lint random-gifs --typeCheck=true --tslintConfig=tslint.json --tsConfig=tsconfig.json",
