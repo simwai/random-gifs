@@ -10,7 +10,7 @@ import { GiphyService } from 'src/app/services/giphy.service'
   templateUrl: './carousel-navigation.html',
   styleUrls: ['./carousel-navigation.scss'],
   host: {
-    class: 'h-100 flex flex-col justify-center items-center'
+    class: 'h-full flex flex-col justify-center items-center'
   }
 })
 

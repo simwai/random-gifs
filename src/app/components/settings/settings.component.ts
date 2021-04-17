@@ -8,7 +8,7 @@ import { environment } from 'src/environments/environment'
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
   host: {
-    class: 'h-100'
+    class: 'h-full'
   }
 })
 export class SettingsComponent {

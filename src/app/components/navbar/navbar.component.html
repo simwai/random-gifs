@@ -5,14 +5,14 @@
 </ng-container>
 
 <ng-template #primary>
-  <div class="flex flex-row justify-center items-center h-auto gap-x-2 w-100">
+  <div class="flex flex-row justify-center items-center h-auto w-full">
     <input #searchInput type="text" class="w-2/3" placeholder="Search for a gif" [(ngModel)]="keyword">
     <ng-container *ngTemplateOutlet="guide"></ng-container>
-    <svg-icon routerLink="/settings" key="cog" fontSize="40px" class="cursor-pointer color-hover"></svg-icon>
+    <svg-icon routerLink="/settings" key="cog" fontSize="40px" class="cursor-pointer color-hover ml-3"></svg-icon>
   </div>
 </ng-template>
 
 <ng-template #guide>
-    <svg-icon routerLink="/guide" key="head-question" fontSize="40px" class="cursor-pointer color-hover"></svg-icon>
+    <svg-icon routerLink="/guide" key="head-question" fontSize="40px" class="cursor-pointer color-hover ml-3"></svg-icon>
 </ng-template>
 

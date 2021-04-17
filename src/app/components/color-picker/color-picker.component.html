@@ -1,9 +1,9 @@
-<div class="flex flex-col gap-y-2">
+<div class="flex flex-col">
   <div>Accent Color Picker</div>
-  <div class="flex flex-row gap-x-4">
+  <div class="flex flex-row">
     <div *ngFor="let color of colors">
       <div #colorItem
-           class="color-item cursor-pointer"
+           class="color-item cursor-pointer mr-3"
            [style.backgroundColor]="color"
            (click)="saveAccentColor($event)"
            [class]="

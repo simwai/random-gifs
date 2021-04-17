@@ -5,7 +5,7 @@
 @import "@fontsource/roboto";
 @import "@fontsource/montserrat";
 
-* {
+*:not(input) {
   user-select: none;
 }
 
@@ -49,6 +49,7 @@ button:hover {
   border-style: solid;
   border-width: 2px;
   border-color: var(--bg-color, theme("colors.grey"));
+  outline: none;
 }
 
 .short-shadow {

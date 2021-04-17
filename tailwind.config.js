@@ -5,19 +5,18 @@ module.exports = {
   darkMode: false, // or 'media' or 'class'
   theme: {
     extend: {
-      maxHeight: {
-        "40-vh": "40vh"
-      },
       maxWidth: {
         "1/3-vw": 100 / 3 + "vw",
-        "80-vw": "80vw",
-        "120-px": "120px"
       },
       width: {
-        "70-vw": "70vw"
+        "70-vw": "70vw",
+        "80-vw": "80vw",
+        "100-vw": "100vw"
       },
       height: {
-        "70-vh": "70vh"
+        "70-vh": "70vh",
+        "40-vh": "40vh",
+        "100-vh": "100vh"
       }
     },
     colors: {
