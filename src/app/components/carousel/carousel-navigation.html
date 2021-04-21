@@ -2,12 +2,12 @@
 <div class="flex flex-col md:flex-row justify-evenly items-center h-full w-full">
   <div class="flex-col hidden md:flex">
     <div class="cursor-pointer hidden md:flex">
-      <svg-icon key="arrow-left-bold-box" (click)="prev()" fontSize="4rem" [color]="bgColor"></svg-icon>
+      <svg-icon key="arrow-left-bold-box" (click)="previous()" fontSize="4rem" [color]="bgColor"></svg-icon>
     </div>
   </div>
   <!-- md:w-70-vw w-80-vw -->
   <div class="flex flex-col justify-center items-center carousel-img-wrapper">
-    <img class="rounded-md" [src]="currentImage" />
+    <img class="rounded-md" [src]="currentImage">
   </div>
     <div class="flex flex-row md:flex-col">
       <div class="cursor-pointer hidden md:flex">
@@ -15,7 +15,7 @@
       </div>
 
       <div class="pr-5 cursor-pointer md:hidden inline-flex">
-        <svg-icon key="arrow-left-bold-box" (click)="prev()" fontSize="3rem" [color]="bgColor"></svg-icon>
+        <svg-icon key="arrow-left-bold-box" (click)="previous()" fontSize="3rem" [color]="bgColor"></svg-icon>
       </div>
       <div class="cursor-pointer md:hidden inline-flex">
         <svg-icon key="arrow-right-bold-box" (click)="next()" fontSize="3rem" [color]="bgColor"></svg-icon>

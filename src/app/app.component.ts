@@ -71,7 +71,7 @@ export class AppComponent {
           if (direction[0] > 0) {
             console.log('right swipe')
 
-            this.carouselNav.prev()
+            this.carouselNav.previous()
           }
         }
       }
