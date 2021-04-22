@@ -1,6 +1,6 @@
-import { Component, ViewChild, OnDestroy, OnInit } from '@angular/core'
-import { setDynterval } from 'dynamic-interval'
+import { Component, OnInit } from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
+import pauseable from 'pauseable'
 
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
@@ -13,9 +13,11 @@ import { GiphyService } from 'src/app/services/giphy.service'
     class: 'h-full flex flex-col justify-center items-center'
   }
 })
-export class CarouselNavigationComponent implements OnDestroy, OnInit {
+export class CarouselNavigationComponent implements OnInit {
 
   constructor(private _giphyService: GiphyService) { }
+
+  /* LocalStorage properties start */
 
   public get interval(): number {
     return this._interval ?? environment.interval * 1000
@@ -24,20 +26,9 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
   public get keyword(): string {
     return this._keyword ?? environment.keyword
   }
+
   @LocalStorage('bgColor')
   public bgColor: string
-
-  private _offset = 0
-  private _gifAmount = 10
-
-  public currentImage: string
-  public images = new Set()
-  private _slideshowCounter: number = 0
-
-  private _dynterval
-  // TODO maybe 10000 is not correct, could depend on view duration
-  private _dyntervalConfig = { wait: 10000 }
-  private _isDyntervalPaused: boolean = false
 
   @LocalStorage('interval')
   private _interval: number
@@ -45,6 +36,19 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
   @LocalStorage('keyword')
   private _keyword: string
 
+  /* LocalStorage properties end */
+
+  public currentImage: string
+  public images = []
+
+  private _offset = 0
+  private _gifAmount = 10
+
+  private _slideshowCounter: number = 0
+
+  private _config = { wait: this.interval }
+
+  private _pauseInterval: any
   private _pauseIntervalTimeout: any
 
   public async fetchGifs(): Promise<any> {
@@ -55,50 +59,53 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
       return
     }
 
-    const mapResponse = response.data.map(item => item.images.original.url)
-    const forSet = [...this.images].concat(mapResponse)
-    this.images = new Set(forSet)
+    this.images =  response.data.map(item => item.images.original.url).concat(this.images)
 
     this._offset += this._gifAmount
   }
 
-  public async next(): Promise<void> {
-    this.pauseDynterval()
+  public async next(isPaused: boolean): Promise<void> {
+    if (isPaused) {
+      this._pauseInterval.pause()
+    }
 
-    if (this._slideshowCounter === this.images.size) {
+    if (this._slideshowCounter === this.images.length) {
       await this.fetchGifs()
     }
 
-    this.currentImage = Array.from(this.images)[this._slideshowCounter] as string
+    this.currentImage = this.images[this._slideshowCounter]
     this._slideshowCounter++
+
+    if (isPaused) {
+      if (this._pauseIntervalTimeout) {
+        clearInterval(this._pauseIntervalTimeout)
+      }
+
+      this._pauseIntervalTimeout = setTimeout(() => {
+        this._pauseInterval.resume()
+      }, this.interval)
+    }
   }
 
-  public previous(): void {
-    this.pauseDynterval()
+  public previous(isPaused: boolean): void {
+    if (isPaused) {
+      this._pauseInterval.pause()
+    }
 
-    this.currentImage = Array.from(this.images)[this._slideshowCounter] as string
+    this.currentImage = this.images[this._slideshowCounter]
 
     if (this._slideshowCounter > 1) {
       this._slideshowCounter--
     }
-  }
 
-  public pauseDynterval(): void {
-    this._isDyntervalPaused = true
+    if (isPaused) {
+      if (this._pauseIntervalTimeout) {
+        clearInterval(this._pauseIntervalTimeout)
+      }
 
-    if (this._pauseIntervalTimeout) {
-      clearTimeout(this._pauseIntervalTimeout)
-    }
-
-    this._pauseIntervalTimeout = setTimeout(() => {
-      this._isDyntervalPaused = false
-    }, this.interval * 2)
-  }
-
-  // will not get triggered because of reroute strategy
-  public ngOnDestroy(): void {
-    if (this._dynterval) {
-      this._dynterval.clear()
+      this._pauseIntervalTimeout = setTimeout(() => {
+        this._pauseInterval.resume()
+      }, this.interval)
     }
   }
 
@@ -111,19 +118,20 @@ export class CarouselNavigationComponent implements OnDestroy, OnInit {
         return
       }
 
-      this.next()
+      this.next(false)
 
       if (this._interval) {
-        this._dyntervalConfig.wait = this._interval
+        this._config.wait = this.interval
       }
 
-      this._dynterval = setDynterval(context => {
-        if (!this._isDyntervalPaused) {
-          this.next()
-        }
-
-        return { ...context, wait: this._dyntervalConfig.wait }
-      }, this._dyntervalConfig)
+      this.experimentalIntervalHandler()
     })()
+  }
+
+  private experimentalIntervalHandler(): void {
+     this._pauseInterval = pauseable.setInterval(() => {
+       console.log('trigger')
+       this.next(false)
+    }, this._config.wait )
   }
 }

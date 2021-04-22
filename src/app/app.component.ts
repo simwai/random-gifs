@@ -64,14 +64,14 @@ export class AppComponent {
           if (direction[0] < 0) {
             console.log('left swipe')
 
-            this.carouselNav.next()
+            this.carouselNav.next(true)
           }
 
           // Right swipe
           if (direction[0] > 0) {
             console.log('right swipe')
 
-            this.carouselNav.previous()
+            this.carouselNav.previous(true)
           }
         }
       }
