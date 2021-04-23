@@ -9,8 +9,6 @@ const tailwindConfig = require('../../../../tailwind.config.js')
   styleUrls: ['./color-picker.component.scss']
 })
 export class ColorPickerComponent {
-  @ViewChild('colorItem') public colorItem: any
-
   public colors: string[]
 
   constructor() {
@@ -32,13 +30,6 @@ export class ColorPickerComponent {
     if (value.match('rgb')) {
       value = this.rgbStringToHexCode(value)
     }
-
-    // console.log(value)
-
-    // if (this.colorItem) {
-    //   const currentBgColor = this.colorItem.nativeElement.style.backgroundColor
-    //   console.log('currentBgColor: ', this.rgbStringToHexCode(currentBgColor))
-    // }
 
     this._bgColor = value
     document.documentElement.style.setProperty('--bg-color', value)

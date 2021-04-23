@@ -14,6 +14,18 @@ import { GiphyService } from 'src/app/services/giphy.service'
   }
 })
 export class CarouselNavigationComponent implements OnInit {
+  public currentImage: string
+  public images = []
+
+  private _offset = 0
+  private _gifAmount = 10
+
+  private _config = { wait: this.interval }
+
+  private _lastKeyword: string
+  private _slideshowCounter = 0
+  private _pauseInterval: any
+  private _pauseIntervalTimeout: any
 
   constructor(private _giphyService: GiphyService) { }
 
@@ -38,19 +50,6 @@ export class CarouselNavigationComponent implements OnInit {
 
   /* LocalStorage properties end */
 
-  public currentImage: string
-  public images = []
-
-  private _offset = 0
-  private _gifAmount = 10
-
-  private _slideshowCounter: number = 0
-
-  private _config = { wait: this.interval }
-
-  private _pauseInterval: any
-  private _pauseIntervalTimeout: any
-
   public async fetchGifs(): Promise<any> {
     const response = await this._giphyService.getGif(this.keyword, this._gifAmount, this._offset).toPromise()
 
@@ -59,58 +58,85 @@ export class CarouselNavigationComponent implements OnInit {
       return
     }
 
-    this.images =  response.data.map(item => item.images.original.url).concat(this.images)
+    // attention!
+    const imageUrls = response.data.map(item => item.images.original.url)
 
+    if (this.keyword !== this._lastKeyword) {
+      this.images = imageUrls
+      this._slideshowCounter = 0
+    } else {
+      this.images = imageUrls.concat(this.images)
+    }
+
+    this.images = this.images.concat(imageUrls)
+    // this._slideshowCounter = 0
     this._offset += this._gifAmount
+    this._lastKeyword = this.keyword
   }
 
   public async next(isPaused: boolean): Promise<void> {
-    if (isPaused) {
-      this._pauseInterval.pause()
-    }
+    // if (isPaused) {
+    //   this._pauseInterval.pause()
+    // }
 
-    if (this._slideshowCounter === this.images.length) {
-      await this.fetchGifs()
-    }
-
-    this.currentImage = this.images[this._slideshowCounter]
-    this._slideshowCounter++
-
-    if (isPaused) {
-      if (this._pauseIntervalTimeout) {
-        clearInterval(this._pauseIntervalTimeout)
+    if (!this.images[this._slideshowCounter] || this._lastKeyword !== this.keyword) {
+      try {
+        await this.fetchGifs()
+      } catch (error) {
+        console.error(error)
+        this._pauseInterval.pause()
+        return
       }
-
-      this._pauseIntervalTimeout = setTimeout(() => {
-        this._pauseInterval.resume()
-      }, this.interval)
+    } else {
+      this.currentImage = this.images[this._slideshowCounter]
+      this._slideshowCounter++
     }
+
+    // else if (!isFirstExecute) {
+    //   // can't increase the index on the first execute
+    //   // TODO try to refactor the slideshowCounter stuff
+    //   this._slideshowCounter++
+    // }
+
+    // if (isPaused) {
+    //   if (this._pauseIntervalTimeout) {
+    //     clearInterval(this._pauseIntervalTimeout)
+    //   }
+
+    //   this._pauseIntervalTimeout = setTimeout(() => {
+    //     this._pauseInterval.resume()
+    //   }, this.interval)
+    // }
   }
 
   public previous(isPaused: boolean): void {
-    if (isPaused) {
-      this._pauseInterval.pause()
-    }
-
-    this.currentImage = this.images[this._slideshowCounter]
+    // if (isPaused) {
+    //   this._pauseInterval.pause()
+    // }
 
     if (this._slideshowCounter > 1) {
+      // TODO i need to keep all images to provide full previous featue
       this._slideshowCounter--
+      this.currentImage = this.images[this._slideshowCounter]
     }
 
-    if (isPaused) {
-      if (this._pauseIntervalTimeout) {
-        clearInterval(this._pauseIntervalTimeout)
-      }
+    // if (isPaused) {
+    //   if (this._pauseIntervalTimeout) {
+    //     clearInterval(this._pauseIntervalTimeout)
+    //   }
 
-      this._pauseIntervalTimeout = setTimeout(() => {
-        this._pauseInterval.resume()
-      }, this.interval)
-    }
+    //   this._pauseIntervalTimeout = setTimeout(() => {
+    //     this._pauseInterval.resume()
+    //   }, this.interval)
+    // }
   }
 
   public ngOnInit(): void {
     (async () => {
+      if (this._interval) {
+        this._config.wait = this.interval
+      }
+
       try {
         await this.fetchGifs()
       } catch (error) {
@@ -118,18 +144,14 @@ export class CarouselNavigationComponent implements OnInit {
         return
       }
 
-      this.next(false)
-
-      if (this._interval) {
-        this._config.wait = this.interval
-      }
-
-      this.experimentalIntervalHandler()
+      this.runSlideshow()
     })()
   }
 
-  private experimentalIntervalHandler(): void {
-     this._pauseInterval = pauseable.setInterval(() => {
+  private runSlideshow(): void {
+    this.next(false)
+
+    this._pauseInterval = pauseable.setInterval(() => {
        console.log('trigger')
        this.next(false)
     }, this._config.wait )
