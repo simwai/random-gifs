@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
-import pauseable from 'pauseable'
+import { promisify } from 'util'
 
 import { environment } from 'src/environments/environment'
 import { GiphyService } from 'src/app/services/giphy.service'
@@ -20,12 +20,11 @@ export class CarouselNavigationComponent implements OnInit {
   private _offset = 0
   private _gifAmount = 10
 
-  private _config = { wait: this.interval }
-
   private _lastKeyword: string
   private _slideshowCounter = 0
   private _pauseInterval: any
   private _pauseIntervalTimeout: any
+  private _isSlideshowRunning = true
 
   constructor(private _giphyService: GiphyService) { }
 
@@ -50,12 +49,12 @@ export class CarouselNavigationComponent implements OnInit {
 
   /* LocalStorage properties end */
 
-  public async fetchGifs(): Promise<any> {
+  public async fetchGifs(): Promise<void> {
     const response = await this._giphyService.getGif(this.keyword, this._gifAmount, this._offset).toPromise()
 
     // keyword not found
     if (response.data.length === 0) {
-      return
+      throw new Error('fetchGif failed')
     }
 
     // attention!
@@ -65,95 +64,57 @@ export class CarouselNavigationComponent implements OnInit {
       this.images = imageUrls
       this._slideshowCounter = 0
     } else {
-      this.images = imageUrls.concat(this.images)
+      this.images = this.images.concat(imageUrls)
     }
 
-    this.images = this.images.concat(imageUrls)
-    // this._slideshowCounter = 0
     this._offset += this._gifAmount
+    // TODO search better solution
     this._lastKeyword = this.keyword
   }
 
-  public async next(isPaused: boolean): Promise<void> {
-    // if (isPaused) {
-    //   this._pauseInterval.pause()
-    // }
-
-    if (!this.images[this._slideshowCounter] || this._lastKeyword !== this.keyword) {
-      try {
-        await this.fetchGifs()
-      } catch (error) {
-        console.error(error)
-        this._pauseInterval.pause()
-        return
-      }
-    } else {
+  public async previous(): Promise<void> {
+    if (this._slideshowCounter > 1) {
+      this._slideshowCounter--
       this.currentImage = this.images[this._slideshowCounter]
+      await this.setTimeoutPromise(this.interval)
+    }
+  }
+
+  public async next(fetchedNewImages = false): Promise<any> {
+    if (!fetchedNewImages)  {
       this._slideshowCounter++
     }
 
-    // else if (!isFirstExecute) {
-    //   // can't increase the index on the first execute
-    //   // TODO try to refactor the slideshowCounter stuff
-    //   this._slideshowCounter++
-    // }
-
-    // if (isPaused) {
-    //   if (this._pauseIntervalTimeout) {
-    //     clearInterval(this._pauseIntervalTimeout)
-    //   }
-
-    //   this._pauseIntervalTimeout = setTimeout(() => {
-    //     this._pauseInterval.resume()
-    //   }, this.interval)
-    // }
-  }
-
-  public previous(isPaused: boolean): void {
-    // if (isPaused) {
-    //   this._pauseInterval.pause()
-    // }
-
-    if (this._slideshowCounter > 1) {
-      // TODO i need to keep all images to provide full previous featue
-      this._slideshowCounter--
+    if (this.currentImage !== this.images[this._slideshowCounter]) {
       this.currentImage = this.images[this._slideshowCounter]
     }
 
-    // if (isPaused) {
-    //   if (this._pauseIntervalTimeout) {
-    //     clearInterval(this._pauseIntervalTimeout)
-    //   }
+    return this.setTimeoutPromise(this.interval)
+  }
 
-    //   this._pauseIntervalTimeout = setTimeout(() => {
-    //     this._pauseInterval.resume()
-    //   }, this.interval)
-    // }
+  private setTimeoutPromise(ms: number): Promise <any> {
+    return new Promise(resolve => setTimeout(resolve, ms))
   }
 
   public ngOnInit(): void {
     (async () => {
-      if (this._interval) {
-        this._config.wait = this.interval
-      }
-
-      try {
-        await this.fetchGifs()
-      } catch (error) {
-        console.error(error)
-        return
-      }
-
-      this.runSlideshow()
+      await this.runSlideshow()
     })()
   }
 
-  private runSlideshow(): void {
-    this.next(false)
-
-    this._pauseInterval = pauseable.setInterval(() => {
-       console.log('trigger')
-       this.next(false)
-    }, this._config.wait )
+  private async runSlideshow(): Promise<void> {
+    while (this._isSlideshowRunning) {
+      if (!this.images[this._slideshowCounter] || this._lastKeyword !== this.keyword) {
+        try {
+          await this.fetchGifs()
+          await this.next(true)
+        } catch (error) {
+          this._isSlideshowRunning = false
+          console.error('carousel fetchGifs from runSlideshow() failed => ' + error.message)
+        }
+      } else {
+        await this.next()
+      }
+    }
   }
 }
