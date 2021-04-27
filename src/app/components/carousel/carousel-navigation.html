@@ -7,7 +7,7 @@
   </div>
   <!-- md:w-70-vw w-80-vw -->
   <div class="flex flex-col justify-center items-center carousel-img-wrapper">
-    <img class="rounded-md" [src]="currentImage">
+    <img class="rounded-md" [src]="currentImage$ | async">
   </div>
     <div class="flex flex-row md:flex-col">
       <div class="cursor-pointer hidden md:flex">
