@@ -24,6 +24,7 @@ import { appHeadQuestionIcon } from './svg/head-question'
 import { appGithubIcon } from './svg/github'
 import { appCogIcon } from './svg/cog'
 import { appHelpIcon } from './svg/help'
+import { appMagnifyIcon } from './svg/magnify'
 
 @NgModule({
    declarations: [
@@ -50,7 +51,8 @@ import { appHelpIcon } from './svg/help'
           appArrowLeftBoldBoxIcon,
           appArrowRightBoldBoxIcon,
           appHeadQuestionIcon,
-          appGithubIcon
+          appGithubIcon,
+          appMagnifyIcon
         ],
       })
    ],

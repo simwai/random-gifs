@@ -1,7 +1,7 @@
 {
   "linterOptions": {
     "exclude": [
-      "src/app/svg"
+      "./src/app/svg"
     ]
   },
   "extends": [
@@ -159,6 +159,7 @@
     "component-selector": [
       true,
       "element"
-    ]
+    ],
+    "ter-arrow-parens": [true, "as-needed"]
   }
 }
