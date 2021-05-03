@@ -17,7 +17,7 @@ export class GifService {
     private _localStorageService: LocalStorageService
   ) { }
 
-  public getGifs(keyword: string, amount: number, offset: number): Observable<string> {
+  public getGifs(keyword: string, amount: number, offset: number): Observable<string[]> {
     const response$ = this._http.get<any>(
       'https://api.giphy.com/v1/gifs/search?api_key='
     + environment.giphyApiKey + '&q=' + keyword + '&limit=' + amount + '&rating=PG&offset=' + offset)
@@ -33,12 +33,12 @@ export class GifService {
 
         return images
       }),
-      mergeMap(result => from(result).pipe(
-          concatMap(item => {
-            return of(item).pipe(delay((this._localStorageService.retrieve('interval') ?? environment.interval * 1000)))
-          })
-        )
-      )
+      // mergeMap(result => from(result).pipe(
+      //     concatMap(item => {
+      //       return of(item).pipe(delay((this._localStorageService.retrieve('interval') ?? environment.interval * 1000)))
+      //     })
+      //   )
+      // )
     )
 
     // observer.subscribe(imageUrl => console.log(imageUrl))

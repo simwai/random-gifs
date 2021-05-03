@@ -1,9 +1,8 @@
 import { Component, OnDestroy, OnInit } from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
-import { Subject, Observable, ReplaySubject, from, of } from 'rxjs'
-import { map, switchMap, tap } from 'rxjs/operators'
+import { Observable } from 'rxjs'
+import { switchMap, tap } from 'rxjs/operators'
 import { SharedService } from 'src/app/services/shared.service'
-import { BehaviorSubject } from 'rxjs'
 
 import { environment } from 'src/environments/environment'
 import { SlideshowService } from 'src/app/services/slideshow.service'
@@ -18,12 +17,17 @@ import { GifService } from 'src/app/services/gif.service'
   }
 })
 export class CarouselNavigationComponent implements OnInit, OnDestroy {
-  public currentImage$: Observable<string>
+  public currentImage$: Observable<string[]>
   public carousel$: Observable<string[]>
+
+  public nextButton$: Observable<any>
+  public previousButton$: Observable<any>
 
   private _gifAmount = 50
   private _offset: number = 0
-  private _index$: BehaviorSubject<number>
+
+  // private _previousButton$: BehaviorSubject<boolean>
+  // private _nextButton$: BehaviorSubject<boolean>
 
   constructor(
     private _gifService: GifService,
@@ -53,19 +57,16 @@ export class CarouselNavigationComponent implements OnInit, OnDestroy {
   /* LocalStorage properties end */
 
   public previous(): void {
-
+    this._sharedService.previousButton$.next(true)
   }
 
   public next(): void {
-
+    this._sharedService.nextButton$.next(true)
   }
 
   public ngOnInit(): void {
-    this._index$ = this._slideshowService.index$
-
-    // TODO check if it works on save and oninit
-    const keywordObserver$: Observable<string> = this._sharedService.keyword$.pipe(
-      switchMap((keyword: string): Observable<string> => {
+    const observer = this._sharedService.keyword$.pipe(
+      switchMap((keyword: string): Observable<string[]> => {
         return this._gifService.getGifs(keyword, this._gifAmount, this._offset)
       }),
       tap(imgUrls => {
@@ -75,7 +76,7 @@ export class CarouselNavigationComponent implements OnInit, OnDestroy {
       })
     )
 
-    this.currentImage$ = keywordObserver$
+    this.currentImage$ = observer
   }
 
   public ngOnDestroy(): void {
@@ -83,5 +84,7 @@ export class CarouselNavigationComponent implements OnInit, OnDestroy {
     // Add 'implements OnDestroy' to the class.
 
     this._sharedService.keyword$.unsubscribe()
+    this._sharedService.previousButton$.unsubscribe()
+    this._sharedService.nextButton$.unsubscribe()
   }
 }
