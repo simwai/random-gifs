@@ -3,6 +3,7 @@ import { RouterOutlet } from '@angular/router'
 import { trigger, transition, style, query, animateChild, animate } from '@angular/animations'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
+import { SlideshowService } from './services/slideshow.service'
 
 @Component({
   selector: 'app-root',
@@ -41,7 +42,7 @@ export class AppComponent {
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
-  constructor() { }
+  constructor(private _slideshowService: SlideshowService) { }
 
   public async swipe(event: TouchEvent, when: string): Promise<void> {
     const coord: [number, number] = [event.changedTouches[0].clientX, event.changedTouches[0].clientY]
@@ -64,14 +65,14 @@ export class AppComponent {
           if (direction[0] < 0) {
             console.log('left swipe')
 
-            this.carouselNav.next()
+            this._slideshowService.nextGif()
           }
 
           // Right swipe
           if (direction[0] > 0) {
             console.log('right swipe')
 
-            this.carouselNav.previous()
+            this._slideshowService.previousGif()
           }
         }
       }

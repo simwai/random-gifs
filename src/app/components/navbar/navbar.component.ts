@@ -19,7 +19,7 @@ export class NavbarComponent implements OnInit {
   @Input() public set keyword(value) {
     this._keyword = value
 
-    this._sharedService.keyword$.next(value)
+    // this._sharedService.keyword$.next(value)
   }
 
   @LocalStorage('keyword')

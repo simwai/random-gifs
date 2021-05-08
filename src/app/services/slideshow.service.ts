@@ -10,16 +10,64 @@ import { GifService } from './gif.service'
   providedIn: 'root'
 })
 export class SlideshowService {
-  public index$: BehaviorSubject<number>
-  public length$: ReplaySubject<number>
+  private _images: string[]
+  private _gifAmount = 50
+  private _offset = 0
+  private _carouselActive: boolean
+  private _intervalId: any
 
-constructor(private _localStorageService: LocalStorageService) {
-    const interval = this._localStorageService.retrieve('interval') ?? environment.interval * 1000
-    this.index$ = new BehaviorSubject<number>(interval)
-    this.length$ = new ReplaySubject<number>(1)
+  private _index: number
+  // public index$: BehaviorSubject<number>
+  // public length$: ReplaySubject<number>
 
-    setInterval(() => {
-      this.index$.next(this.index$.value + 1)
-    }, interval)
+constructor(
+  private _localStorageService: LocalStorageService,
+  private _gifService: GifService
+) {
+  this._images = []
+  this._carouselActive = true
+  this._index = 0
+
+  this.loadGifs()
+    // const interval = this._localStorageService.retrieve('interval') ?? environment.interval * 1000
+    // this.index$ = new BehaviorSubject<number>(interval)
+    // this.length$ = new ReplaySubject<number>(1)
+
+    // setInterval(() => {
+    //   this.index$.next(this.index$.value + 1)
+    // }, interval)
+  }
+
+  public restartInterval(): void {
+    clearInterval(this._intervalId)
+    if (this._carouselActive) {
+      this._intervalId = setInterval(() => { this._index++; console.log(this._index)}, 2000)
+    }
+  }
+
+  public loadGifs(): void {
+    this._gifService
+      .getGifs(this._localStorageService.retrieve('keyword') ?? environment.keyword, this._gifAmount, this._offset)
+      .subscribe(data => {
+        this._images = data
+        this.restartInterval()
+      })
+  }
+
+  public nextGif(): void {
+    this._carouselActive = true
+    this.restartInterval()
+    this._index++
+    // TODO check if gif is available
+  }
+
+  public previousGif(): void {
+    this.restartInterval()
+    this._carouselActive = false
+    this._index--
+  }
+
+  public get currentGif(): string {
+    return this._images[this._index]
   }
 }
