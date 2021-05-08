@@ -17,7 +17,7 @@ import { GifService } from 'src/app/services/gif.service'
   }
 })
 export class CarouselNavigationComponent implements OnInit, OnDestroy {
-  public currentImage$: Observable<string[]>
+  public currentImage$: Observable<string>
   public carousel$: Observable<string[]>
 
   public nextButton$: Observable<any>
@@ -57,16 +57,21 @@ export class CarouselNavigationComponent implements OnInit, OnDestroy {
   /* LocalStorage properties end */
 
   public previous(): void {
-    this._sharedService.previousButton$.next(true)
+
+    if (this._gifService.images.length - 1 > 0) {
+      // this._sharedService.previousButton$.next(true)
+      // this._gifService.i--
+    }
   }
 
   public next(): void {
-    this._sharedService.nextButton$.next(true)
+    // this._sharedService.nextButton$.next(true)
+    // this._gifService.i++
   }
 
   public ngOnInit(): void {
     const observer = this._sharedService.keyword$.pipe(
-      switchMap((keyword: string): Observable<string[]> => {
+      switchMap((keyword: string): Observable<string> => {
         return this._gifService.getGifs(keyword, this._gifAmount, this._offset)
       }),
       tap(imgUrls => {

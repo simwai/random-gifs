@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ng serve",
-    "start-4021": "ng serve -o --port 4201",
+    "start-4201": "ng serve -o --port 4201",
     "build": "ng build --prod",
     "test": "ng test",
     "e2e": "ng e2e",
