@@ -12,19 +12,8 @@ import { environment } from 'src/environments/environment'
   }
 })
 export class SettingsComponent {
-  constructor() { }
-
-  public get interval(): number {
-    return this._interval / 1000 ?? environment.interval
-  }
-
-  @Input() public set interval(value: number) {
-    if (/\d/g.test(value.toString())) {
-      this._interval = value * 1000
-    } else {
-      // TODO showError()
-    }
-  }
+  @LocalStorage('bgColor') private _bgColor: string
+  @LocalStorage('interval') private _interval: number
 
   public get bgColor(): string {
     return this._bgColor
@@ -39,10 +28,15 @@ export class SettingsComponent {
     document.documentElement.style.setProperty('--bg-color', value)
   }
 
-  @LocalStorage('interval')
-  private _interval: number
+  public get interval(): number {
+    return this._interval / 1000 ?? environment.interval
+  }
 
-  @LocalStorage('bgColor')
-  private _bgColor: string
+  @Input() public set interval(value: number) {
+    if (/\d/g.test(value.toString())) {
+      this._interval = value * 1000
+    } else {
+      // TODO showError()
+    }
+  }
 }
-

@@ -13,7 +13,7 @@ export class SharedService {
   // public previousButton$: Subject<void>
   // public nextButton$: Subject<void>
 
-  constructor(private _localStorageService: LocalStorageService) {
+  constructor(private readonly _localStorageService: LocalStorageService) {
     // const setKeyword = this._localStorageService.retrieve('keyword')
     // this.keyword$ = new BehaviorSubject<string>(setKeyword ?? environment.keyword)
     // this.previousButton$ = new Subject()

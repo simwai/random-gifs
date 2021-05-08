@@ -10,19 +10,19 @@ import { GifService } from './gif.service'
   providedIn: 'root'
 })
 export class SlideshowService {
-  private _images: string[]
-  private _gifAmount = 50
-  private _offset = 0
   private _carouselActive: boolean
-  private _intervalId: any
+  private readonly _gifAmount = 50
+  private _images: string[]
 
   private _index: number
+  private _intervalId: any
+  private readonly _offset = 0
   // public index$: BehaviorSubject<number>
   // public length$: ReplaySubject<number>
 
-constructor(
-  private _localStorageService: LocalStorageService,
-  private _gifService: GifService
+  constructor(
+  private readonly _localStorageService: LocalStorageService,
+  private readonly _gifService: GifService
 ) {
   this._images = []
   this._carouselActive = true
@@ -38,11 +38,8 @@ constructor(
     // }, interval)
   }
 
-  public restartInterval(): void {
-    clearInterval(this._intervalId)
-    if (this._carouselActive) {
-      this._intervalId = setInterval(() => { this._index++; console.log(this._index)}, 2000)
-    }
+  public get currentGif(): string {
+    return this._images[this._index]
   }
 
   public loadGifs(): void {
@@ -67,7 +64,10 @@ constructor(
     this._index--
   }
 
-  public get currentGif(): string {
-    return this._images[this._index]
+  public restartInterval(): void {
+    clearInterval(this._intervalId)
+    if (this._carouselActive) {
+      this._intervalId = setInterval(() => { this._index++; console.log(this._index)}, 2000)
+    }
   }
 }

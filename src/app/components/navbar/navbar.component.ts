@@ -1,8 +1,6 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
-import { BehaviorSubject } from 'rxjs'
-import { SharedService } from 'src/app/services/shared.service'
 
 import { environment } from 'src/environments/environment'
 
@@ -12,6 +10,13 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+
+  @LocalStorage('keyword') private _keyword: string
+
+  constructor(
+    private readonly _router: Router,
+    private readonly _localStorageService: LocalStorageService
+  ) { }
   public get keyword(): string {
     return this._keyword ?? environment.keyword
   }
@@ -21,15 +26,6 @@ export class NavbarComponent implements OnInit {
 
     // this._sharedService.keyword$.next(value)
   }
-
-  @LocalStorage('keyword')
-  private _keyword: string
-
-  constructor(
-    private _router: Router,
-    private _localStorageService: LocalStorageService,
-    private _sharedService: SharedService
-  ) { }
 
   public isAlternative(): boolean {
     const currentPage = this._router.url
@@ -60,4 +56,3 @@ export class NavbarComponent implements OnInit {
     }
   }
 }
-

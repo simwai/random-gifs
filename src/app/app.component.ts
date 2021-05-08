@@ -1,6 +1,6 @@
+import { animate, animateChild, query, style, transition, trigger } from '@angular/animations'
 import { Component, Input, ViewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
-import { trigger, transition, style, query, animateChild, animate } from '@angular/animations'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
 import { SlideshowService } from './services/slideshow.service'
@@ -24,14 +24,14 @@ import { SlideshowService } from './services/slideshow.service'
         query(':enter', [
           animate('700ms ease-out'),
           style({ opacity: 1 })
-        ], { optional: true }),
+        ], { optional: true })
         // query(':leave', animateChild()),
         // query(':leave', [
         //   animate('700ms ease-out'), style({ opacity: 1 })
         // ])
-      ]),
+      ])
     ])
-  ],
+  ]
 })
 export class AppComponent {
   // {static: false } is default
@@ -42,7 +42,18 @@ export class AppComponent {
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
-  constructor(private _slideshowService: SlideshowService) { }
+  constructor(private readonly _slideshowService: SlideshowService) { }
+
+  public onActivate(event): void {
+    this.carouselNav = event
+  }
+
+  // Here, the prepareRoute() method takes the value of the outlet directive (established through #outlet="outlet") and returns
+  // a string value representing the state of the animation based on the custom data of the current active route.
+  // You can use this data to control which transition to execute for each route.
+  public prepareRoute(outlet: RouterOutlet): any {
+    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
+  }
 
   public async swipe(event: TouchEvent, when: string): Promise<void> {
     const coord: [number, number] = [event.changedTouches[0].clientX, event.changedTouches[0].clientY]
@@ -77,16 +88,5 @@ export class AppComponent {
         }
       }
     }
-  }
-
-  public onActivate(event): void {
-    this.carouselNav = event
-  }
-
-  // Here, the prepareRoute() method takes the value of the outlet directive (established through #outlet="outlet") and returns
-  // a string value representing the state of the animation based on the custom data of the current active route.
-  // You can use this data to control which transition to execute for each route.
-  public prepareRoute(outlet: RouterOutlet): any {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
   }
 }

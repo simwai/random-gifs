@@ -9,7 +9,7 @@ const routes: Routes = [
   { path: 'guide', component: GuideComponent, data: { animation: 'Guide' } },
   { path: 'settings', component: SettingsComponent, data: { animation: 'Settings' } },
   { path: 'carousel', component: CarouselNavigationComponent, data: { animation: 'Carousel' } },
-  { path: '', redirectTo: '/carousel', pathMatch: 'full' },
+  { path: '', redirectTo: '/carousel', pathMatch: 'full' }
 ]
 
 @NgModule({
