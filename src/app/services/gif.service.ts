@@ -11,14 +11,17 @@ import { environment } from '../../environments/environment'
   providedIn: 'root'
 })
 export class GifService {
-  public images: string[] = []
+  public gifs: string[] = []
+  private lastKeyword: string
 
   constructor(
-    private readonly _http: HttpClient,
-    private readonly _localStorageService: LocalStorageService
+    private readonly _http: HttpClient
   ) { }
 
   public getGifs(keyword: string, amount: number, offset: number): Observable<string[]> {
+    if (this.lastKeyword !== keyword) { this.gifs = [] }
+    this.lastKeyword = keyword
+
     const response$ = this._http.get<any>(
       'https://api.giphy.com/v1/gifs/search?api_key='
     + environment.giphyApiKey + '&q=' + keyword + '&limit=' + amount + '&rating=PG&offset=' + offset)
@@ -29,21 +32,12 @@ export class GifService {
       ),
       map((gifObject: any): string[] => {
         for (const value of gifObject.data) {
-          this.images.push(value.images.original.url as string)
+          this.gifs.push(value.images.original.url as string)
         }
 
-        return this.images
+        return this.gifs
       })
     )
-    //   // convert image array to image stream
-    //   mergeMap(result => from(result).pipe(
-    //     concatMap(item => {
-    //       return of(item).pipe(delay((this._localStorageService.retrieve('interval') ?? environment.interval * 1000)))
-    //     })
-    //   ))
-    // )
-
-    // observer.subscribe(data => console.log(data))
 
     return observer
   }

@@ -14,17 +14,7 @@ import { environment } from 'src/environments/environment'
 })
 export class CarouselNavigationComponent {
   @LocalStorage('bgColor') public bgColor: string
-  @LocalStorage('interval') private readonly _interval: number
-  @LocalStorage('keyword') private readonly _keyword: string
 
   // tslint:disable-next-line: unnecessary-constructor
   constructor(public slideshowService: SlideshowService) {}
-
-  public get interval(): number {
-    return this._interval ?? environment.interval * 1000
-  }
-
-  public get keyword(): string {
-    return this._keyword ?? environment.keyword
-  }
 }

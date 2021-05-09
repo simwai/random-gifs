@@ -1,7 +1,5 @@
-import { Injectable } from '@angular/core'
+import { Injectable, NgZone } from '@angular/core'
 import { LocalStorageService } from 'ngx-webstorage'
-import { BehaviorSubject, merge, Observable, ReplaySubject } from 'rxjs'
-import { Subject } from 'rxjs/internal/Subject'
 
 import { environment } from 'src/environments/environment'
 import { GifService } from './gif.service'
@@ -10,64 +8,85 @@ import { GifService } from './gif.service'
   providedIn: 'root'
 })
 export class SlideshowService {
-  private _carouselActive: boolean
-  private readonly _gifAmount = 50
-  private _images: string[]
-
-  private _index: number
+  public gifs: string[]
+  public index: number
+  public offset: number
+  private readonly _carouselActive: boolean
+  // public isKeywordNew = false
+  private readonly _gifAmount
   private _intervalId: any
-  private readonly _offset = 0
-  // public index$: BehaviorSubject<number>
-  // public length$: ReplaySubject<number>
 
   constructor(
-  private readonly _localStorageService: LocalStorageService,
-  private readonly _gifService: GifService
-) {
-  this._images = []
-  this._carouselActive = true
-  this._index = 0
+    private readonly _localStorageService: LocalStorageService,
+    private readonly _gifService: GifService,
+    private readonly _ngZone: NgZone
+  ) {
+    this.gifs = []
+    this.index = 0
+    this.offset = 0
+    this._gifAmount = 50
+    this._carouselActive = true
 
-  this.loadGifs()
-    // const interval = this._localStorageService.retrieve('interval') ?? environment.interval * 1000
-    // this.index$ = new BehaviorSubject<number>(interval)
-    // this.length$ = new ReplaySubject<number>(1)
-
-    // setInterval(() => {
-    //   this.index$.next(this.index$.value + 1)
-    // }, interval)
+    this.loadGifs()
   }
 
   public get currentGif(): string {
-    return this._images[this._index]
+    return this.gifs[this.index]
   }
 
   public loadGifs(): void {
+    let keyword = this._localStorageService.retrieve('keyword')
+
+    if (!keyword) {
+      keyword = environment.keyword
+    }
+
+    console.log(keyword)
     this._gifService
-      .getGifs(this._localStorageService.retrieve('keyword') ?? environment.keyword, this._gifAmount, this._offset)
+      .getGifs(keyword, this._gifAmount, this.offset)
       .subscribe(data => {
-        this._images = data
+        this.gifs = data
         this.restartInterval()
       })
   }
 
   public nextGif(): void {
-    this._carouselActive = true
     this.restartInterval()
-    this._index++
+    this.index++
+
+    // if (this.index + 1 > this.gifs.length - 1) {
+    //   this.loadGifs()
+    // }
+
+    console.log(this.index)
     // TODO check if gif is available
   }
 
   public previousGif(): void {
     this.restartInterval()
-    this._carouselActive = false
-    this._index--
+    this.index--
+
+    // if (this.index - 1 < 0) {
+    //   console.log(this.index)
+
+    //   return
+    // }
+
+    console.log(this.index)
   }
 
   public restartInterval(): void {
     clearInterval(this._intervalId)
-    if (this._carouselActive) {
-      this._intervalId = setInterval(() => { this._index++; console.log(this._index)}, 2000)
-    }
+
+    // prevent change detection bottleneck
+    // https://lukeliutingchun.medium.com/angular-performance-issue-caused-by-settimeout-and-setinterval-1a4a65c07be3
+    this._ngZone.runOutsideAngular(() => {
+      if (this._carouselActive) {
+        this._intervalId = setInterval(() => {
+          this.index++
+          console.log(this.index)
+        }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
+      }
+    })
   }
 }

@@ -1,6 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
+import { SlideshowService } from 'src/app/services/slideshow.service'
 
 import { environment } from 'src/environments/environment'
 
@@ -10,21 +11,25 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
-
   @LocalStorage('keyword') private _keyword: string
 
   constructor(
     private readonly _router: Router,
-    private readonly _localStorageService: LocalStorageService
-  ) { }
+    private readonly _localStorageService: LocalStorageService,
+    private readonly _slideshowService: SlideshowService
+  ) {}
+
   public get keyword(): string {
     return this._keyword ?? environment.keyword
   }
 
-  @Input() public set keyword(value) {
-    this._keyword = value
+  public set keyword(value) {
+    if (this.keyword === value) { return }
 
-    // this._sharedService.keyword$.next(value)
+    this._keyword = value
+    this._slideshowService.index = 0
+    this._slideshowService.offset = 0
+    this._slideshowService.loadGifs()
   }
 
   public isAlternative(): boolean {
