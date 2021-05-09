@@ -3,7 +3,8 @@
     "node_modules/codelyzer"
   ],
   "extends": [
-    "angular-tslint-rules"
+    "angular-tslint-rules",
+    "tslint-eslint-rules"
   ],
   "rules": {
     "member-access": true,
@@ -65,5 +66,14 @@
     "exclude": [
       "./src/app/svg/*.ts"
     ]
-  }
+  },
+  "func-call-spacing": [
+    "error", 
+    "never"
+  ],
+  "space-in-parens": [
+    "error", 
+    "always"
+  ],
+  "no-implicit-dependencies": false
 }
