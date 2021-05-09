@@ -11,7 +11,6 @@ export class SlideshowService {
   public gifs: string[]
   public index: number
   public offset: number
-  private readonly _carouselActive: boolean
   // public isKeywordNew = false
   private readonly _gifAmount
   private _intervalId: any
@@ -25,7 +24,6 @@ export class SlideshowService {
     this.index = 0
     this.offset = 0
     this._gifAmount = 50
-    this._carouselActive = true
 
     this.loadGifs()
   }
@@ -81,12 +79,10 @@ export class SlideshowService {
     // prevent change detection bottleneck
     // https://lukeliutingchun.medium.com/angular-performance-issue-caused-by-settimeout-and-setinterval-1a4a65c07be3
     this._ngZone.runOutsideAngular(() => {
-      if (this._carouselActive) {
-        this._intervalId = setInterval(() => {
-          this.index++
-          console.log(this.index)
-        }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
-      }
+      this._intervalId = setInterval(() => {
+        this.index++
+        console.log(this.index)
+      }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
     })
   }
 }
