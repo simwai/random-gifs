@@ -1,7 +1,6 @@
 import { Component, Input } from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
 
-import { SlideshowService } from 'src/app/services/slideshow.service'
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -15,8 +14,6 @@ import { environment } from 'src/environments/environment'
 export class SettingsComponent {
   @LocalStorage('bgColor') private _bgColor: string
   @LocalStorage('interval') private _interval: number
-
-  constructor(private readonly _slideshowService: SlideshowService) {}
 
   public get bgColor(): string {
     return this._bgColor
@@ -46,7 +43,8 @@ export class SettingsComponent {
     if (/\d/g.test(value.toString())) {
       this._interval = value * 1000
 
-      this._slideshowService.restartInterval()
+// TODO solve this
+      // this._slideshowService.restartInterval()
     } else {
       // TODO showError()
     }

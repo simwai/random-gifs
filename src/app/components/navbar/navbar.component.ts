@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core'
 import { Router } from '@angular/router'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
-import { SlideshowService } from 'src/app/services/slideshow.service'
+import { SharedVarsService } from 'src/app/services/shared-vars.service'
 
 import { environment } from 'src/environments/environment'
 
@@ -16,7 +16,7 @@ export class NavbarComponent implements OnInit {
   constructor(
     private readonly _router: Router,
     private readonly _localStorageService: LocalStorageService,
-    private readonly _slideshowService: SlideshowService
+    private readonly _sharedVarsService: SharedVarsService
   ) {}
 
   public get keyword(): string {
@@ -27,9 +27,13 @@ export class NavbarComponent implements OnInit {
     if (this.keyword === value) { return }
 
     this._keyword = value
-    this._slideshowService.index = 0
-    this._slideshowService.offset = 0
-    this._slideshowService.loadGifs()
+    // TODO fix this
+    // this._slideshowService.index = 0
+    // this._slideshowService.offset = 0
+    // this._slideshowService.loadGifs()
+
+    // this._sharedVarsService.index$.next(0)
+    // this._sharedVarsService.keyword$.next(value)
   }
 
   public isAlternative(): boolean {

@@ -3,7 +3,6 @@ import { Component, Input, ViewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
-import { SlideshowService } from './services/slideshow.service'
 
 @Component({
   selector: 'app-root',
@@ -42,8 +41,6 @@ export class AppComponent {
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
-  constructor(private readonly _slideshowService: SlideshowService) { }
-
   public onActivate(event): void {
     this.carouselNav = event
   }
@@ -76,14 +73,14 @@ export class AppComponent {
           if (direction[0] < 0) {
             console.log('left swipe')
 
-            this._slideshowService.nextGif()
+            this.carouselNav.nextGif()
           }
 
           // Right swipe
           if (direction[0] > 0) {
             console.log('right swipe')
 
-            this._slideshowService.previousGif()
+            this.carouselNav.previousGif()
           }
         }
       }
