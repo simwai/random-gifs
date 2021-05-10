@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { ObserveOnOperator } from 'rxjs/internal/operators/observeOn'
@@ -18,6 +18,8 @@ import { environment } from 'src/environments/environment'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselNavigationComponent implements OnInit {
+  // TODO Fix update problem for bgColor, changedetection, pass value from settingsComponent on bgColor set to bgColor$ in sharedVars
+  // first look in old commits, should have worked before
   @LocalStorage('bgColor') public bgColor: string
 
   public gifs: string[]
@@ -34,7 +36,9 @@ export class CarouselNavigationComponent implements OnInit {
     private readonly _sharedVarsService: SharedVarsService
   ) {}
 
-  public get currentGif(): string {
+  @Input() public get currentGif(): string {
+    console.log(this.gifs[this.index])
+
     return this.gifs[this.index]
   }
 
@@ -47,36 +51,6 @@ export class CarouselNavigationComponent implements OnInit {
     this._cdRef.detectChanges()
   }
 
-  public loadGifs(): void {
-    let keyword = this._localStorageService.retrieve('keyword')
-
-    if (!keyword) {
-      keyword = environment.keyword
-    }
-
-    console.log(keyword)
-    this._gifService
-      .getGifs(keyword)
-      .subscribe(data => {
-        this.gifs = data
-        this.restartInterval()
-      }
-    )
-  }
-
-  public nextGif(): void {
-    if (this.index + 1 > this.gifs.length - 1) {
-      this.loadGifs()
-    } else {
-      this.restartInterval()
-    }
-
-    this.index = this.index + 1
-    // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
-
-    console.log(this.index)
-  }
-
   public ngOnInit(): void {
     this.gifs = []
     this.index = 0
@@ -87,29 +61,75 @@ export class CarouselNavigationComponent implements OnInit {
     // })
   }
 
-  public previousGif(): void {
-    if (this.index - 1 < 0) {
-      console.log(this.index)
+  public loadGifs(): void {
+    let keyword = this._localStorageService.retrieve('keyword')
 
-      return
+    if (!keyword) {
+      keyword = environment.keyword
     }
 
+    // TODO convert to promised in gifservice
+    console.log(keyword)
+    this._gifService
+      .getGifs(keyword)
+      .subscribe(data => {
+        this.gifs = data
+        this.restartInterval()
+        this._cdRef.detectChanges()
+      }
+    )
+  }
+
+  public nextGif(): void {
+    // if ((this.index + 1) > (this.gifs.length - 1)) {
+    //   this.loadGifs()
+    // } else {
+    //   this.index++
+    //   this.restartInterval()
+    // }
+
     this.restartInterval()
-    this.index = this.index -  1
+    this.index++
+
+    // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
+
+    console.log(this.index)
+  }
+
+  public previousGif(): void {
+    // if ((this.index - 1) < 0) {
+    //   console.log(this.index)
+
+    //   return
+    // }
+
+    this.restartInterval()
+    this.index--
     // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value - 1)
 
     console.log(this.index)
   }
 
   public restartInterval(): void {
-    clearInterval(this._intervalId)
 
-    // prevent change detection bottleneck
-    // https://lukeliutingchun.medium.com/angular-performance-issue-caused-by-settimeout-and-setinterval-1a4a65c07be3
+    // // prevent change detection bottleneck
+    // // https://lukeliutingchun.medium.com/angular-performance-issue-caused-by-settimeout-and-setinterval-1a4a65c07be3
+    // this._ngZone.runOutsideAngular(() => {
+    //   this._intervalId = setInterval(() => {
+    //     this.index++
+    //     // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
+    //     console.log(this.index)
+    //   }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
+    // })
+
     this._ngZone.runOutsideAngular(() => {
+      if (this._intervalId) {
+        clearInterval(this._intervalId)
+      }
+
       this._intervalId = setInterval(() => {
         this.index++
-        this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
+        // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
         console.log(this.index)
       }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
     })

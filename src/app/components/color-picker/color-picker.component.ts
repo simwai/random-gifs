@@ -1,4 +1,4 @@
-import { Component, Input, ViewChild } from '@angular/core'
+import { Component, Input} from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
 
 import tailwindConfig from '../../../../tailwind.config.js'

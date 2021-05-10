@@ -12,21 +12,23 @@ import { environment } from 'src/environments/environment'
   }
 })
 export class SettingsComponent {
-  @LocalStorage('bgColor') private _bgColor: string
+  // @LocalStorage('bgColor') private readonly _bgColor: string
   @LocalStorage('interval') private _interval: number
 
-  public get bgColor(): string {
-    return this._bgColor
-  }
+  // public get bgColor(): string {
+  //   return this._bgColor
+  // }
 
-  @Input() public set bgColor(value: string) {
-    if (!value) {
-      return
-    }
+  // @Input() public set bgColor(value: string) {
+  //   if (!value) {
+  //     return
+  //   }
 
-    this._bgColor = value
-    document.documentElement.style.setProperty('--bg-color', value)
-  }
+  //   this._bgColor = value
+  //   document.documentElement.style.setProperty('--bg-color', value)
+
+  //   this._appRef.tick()
+  // }
 
   public get interval(): number {
     if (this._interval) {
@@ -43,7 +45,9 @@ export class SettingsComponent {
     if (/\d/g.test(value.toString())) {
       this._interval = value * 1000
 
-// TODO solve this
+      // this._appRef.tick()
+
+      // TODO solve this
       // this._slideshowService.restartInterval()
     } else {
       // TODO showError()
