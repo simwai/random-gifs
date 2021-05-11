@@ -3,6 +3,7 @@ import { Component, Input, ViewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
+import { SettingsComponent } from './components/settings/settings.component'
 
 @Component({
   selector: 'app-root',
@@ -24,25 +25,42 @@ import { CarouselNavigationComponent } from './components/carousel/carousel-navi
           animate('700ms ease-out'),
           style({ opacity: 1 })
         ], { optional: true })
-        // query(':leave', animateChild()),
-        // query(':leave', [
-        //   animate('700ms ease-out'), style({ opacity: 1 })
-        // ])
       ])
     ])
   ]
 })
 export class AppComponent {
+  // TODO test if viewchild this can be removed
   // {static: false } is default
   @ViewChild('carousel') public carouselNav: CarouselNavigationComponent
+  @ViewChild('carousel') public settingsComponent: SettingsComponent
 
   @Input() public isAlternative: boolean
 
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
-  public onActivate(event): void {
-    this.carouselNav = event
+  // TODO test if this can be removed
+  public onActivate(event: any): void {
+    console.log(event)
+    if (event.constructor.name === 'CarouselNavigationComponent') { this.carouselNav = event}
+    if (event.constructor.name === 'SettingsComponent') {
+      this.settingsComponent = event
+      this.settingsComponent.intervalChanged.subscribe(_interval => this.carouselNav.restartInterval())
+    }
+  }
+
+  // get new gifs if keyword changes
+  public onKeywordChanged(_keyword: string): void {
+    this.carouselNav.index = 0
+
+    // don't need to pass keyword because it is in the localstorage
+    this.carouselNav.loadGifs()
+  }
+
+  public onIntervalChanged(_interval: number): void {
+    // don't need to pass interval because it is in the localstorage
+    this.carouselNav.restartInterval()
   }
 
   // Here, the prepareRoute() method takes the value of the outlet directive (established through #outlet="outlet") and returns

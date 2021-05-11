@@ -1,7 +1,6 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { Router } from '@angular/router'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
-import { SharedVarsService } from 'src/app/services/shared-vars.service'
 
 import { environment } from 'src/environments/environment'
 
@@ -11,29 +10,25 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./navbar.component.scss']
 })
 export class NavbarComponent implements OnInit {
+  @Output() public readonly keywordChanged = new EventEmitter<string>()
+
   @LocalStorage('keyword') private _keyword: string
 
   constructor(
     private readonly _router: Router,
-    private readonly _localStorageService: LocalStorageService,
-    private readonly _sharedVarsService: SharedVarsService
+    private readonly _localStorageService: LocalStorageService
   ) {}
 
   public get keyword(): string {
     return this._keyword ?? environment.keyword
   }
 
-  public set keyword(value) {
-    if (this.keyword === value) { return }
+  @Input() public set keyword(value) {
+    if (this.keyword === value|| !value) { return }
 
     this._keyword = value
-    // TODO fix this
-    // this._slideshowService.index = 0
-    // this._slideshowService.offset = 0
-    // this._slideshowService.loadGifs()
 
-    // this._sharedVarsService.index$.next(0)
-    // this._sharedVarsService.keyword$.next(value)
+    this.keywordChanged.emit(value)
   }
 
   public isAlternative(): boolean {

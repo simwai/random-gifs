@@ -43,9 +43,12 @@ export class GifService {
           this.gifs.push(value.images.original.url as string)
         }
 
+        // TODO string[] to set, i wanna avoid duplicates!!
         return this.gifs
       })
     )
+
+    console.log(this._offset)
 
     this._offset += amount ?? this._gifAmount
 

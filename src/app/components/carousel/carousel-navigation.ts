@@ -1,8 +1,5 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { ObserveOnOperator } from 'rxjs/internal/operators/observeOn'
-import { switchMap } from 'rxjs/operators'
 import { GifService } from 'src/app/services/gif.service'
 import { SharedVarsService } from 'src/app/services/shared-vars.service'
 
@@ -28,6 +25,8 @@ export class CarouselNavigationComponent implements OnInit {
   private _index: number
   private _intervalId: any
 
+  private _init: boolean
+
   constructor(
     private readonly _localStorageService: LocalStorageService,
     private readonly _gifService: GifService,
@@ -48,17 +47,17 @@ export class CarouselNavigationComponent implements OnInit {
 
   public set index(value: number) {
     this._index = value
+
     this._cdRef.detectChanges()
   }
 
   public ngOnInit(): void {
+    this._init = true
+
     this.gifs = []
     this.index = 0
-    this.loadGifs()
 
-    // this._sharedVarsService.index$.subscribe(data => {
-    //   this._index = data
-    // })
+    this.loadGifs()
   }
 
   public loadGifs(): void {
@@ -68,12 +67,21 @@ export class CarouselNavigationComponent implements OnInit {
       keyword = environment.keyword
     }
 
-    // TODO convert to promised in gifservice
     console.log(keyword)
     this._gifService
       .getGifs(keyword)
       .subscribe(data => {
-        this.gifs = data
+        // TODO if init overwrite instead concat
+        if (this._init) {
+          this.gifs = data
+          this._init = false
+        } else {
+          this.gifs = this.gifs.concat(data)
+        }
+
+        // this.gifs = this._init ? data : this.gifs.concat(data)
+
+        // TODO is this interval correct?
         this.restartInterval()
         this._cdRef.detectChanges()
       }
@@ -81,46 +89,36 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public nextGif(): void {
-    // if ((this.index + 1) > (this.gifs.length - 1)) {
-    //   this.loadGifs()
-    // } else {
-    //   this.index++
-    //   this.restartInterval()
-    // }
+    // load gifs before the end is reached
+    if (!this.gifs[this.index + 5]) {
+      this.loadGifs()
+    }
 
     this.restartInterval()
     this.index++
-
-    // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
 
     console.log(this.index)
   }
 
   public previousGif(): void {
-    // if ((this.index - 1) < 0) {
-    //   console.log(this.index)
+    if ((this.index - 1) < 0) {
+      console.log(this.index)
 
-    //   return
-    // }
+      return
+    }
 
     this.restartInterval()
     this.index--
-    // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value - 1)
 
     console.log(this.index)
   }
 
   public restartInterval(): void {
-
-    // // prevent change detection bottleneck
-    // // https://lukeliutingchun.medium.com/angular-performance-issue-caused-by-settimeout-and-setinterval-1a4a65c07be3
-    // this._ngZone.runOutsideAngular(() => {
-    //   this._intervalId = setInterval(() => {
-    //     this.index++
-    //     // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
-    //     console.log(this.index)
-    //   }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
-    // })
+    // TODO maybe not the correct position, maybe makes other code obsolete
+    // if (this._init) {
+    //   // this.index = 0
+    //   this._init = false
+    // }
 
     this._ngZone.runOutsideAngular(() => {
       if (this._intervalId) {
@@ -128,8 +126,17 @@ export class CarouselNavigationComponent implements OnInit {
       }
 
       this._intervalId = setInterval(() => {
-        this.index++
-        // this._sharedVarsService.index$.next(this._sharedVarsService.index$.value + 1)
+        this._ngZone.run(() => {
+          // if (!this.gifs[this.index + 1]) {
+          //   this.loadGifs()
+          // }
+          if (!this.gifs[this.index + 5]) {
+            this.loadGifs()
+          }
+
+          this.index++
+        })
+
         console.log(this.index)
       }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
     })

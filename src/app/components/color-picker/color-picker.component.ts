@@ -1,4 +1,4 @@
-import { Component, Input} from '@angular/core'
+import { Component, Input } from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
 
 import tailwindConfig from '../../../../tailwind.config.js'
@@ -12,6 +12,16 @@ export class ColorPickerComponent {
   public colors: string[]
 
   @LocalStorage('bgColor') private _bgColor: string
+
+  private static rgbToHex(rgb: any): string {
+    let hex = Number(rgb).toString(16)
+
+    if (hex.length < 2) {
+      hex = '0' + hex
+    }
+
+    return hex
+  }
 
   constructor() {
     this.loadColors()
@@ -74,15 +84,5 @@ export class ColorPickerComponent {
     }
 
     this.colors = parsedColors
-  }
-
-  private static rgbToHex(rgb: any): string {
-    let hex = Number(rgb).toString(16)
-
-    if (hex.length < 2) {
-      hex = '0' + hex
-    }
-
-    return hex
   }
 }

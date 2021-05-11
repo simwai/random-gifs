@@ -1,7 +1,7 @@
 <div class="p-6 h-100-vh w-100-vw" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
   <div class="flex flex-col items-center h-full justify-around w-full">
     <div class="flex flex-row h-1/6 items-center justify-center w-full">
-      <navbar class="width-10"></navbar>
+      <navbar (keywordChanged)="onKeywordChanged($event)" class="width-10"></navbar>
     </div>
     <div class="flex flex-row h-4/6 items-center justify-center w-full overflow-hidden" [@routeAnimations]="prepareRoute(outlet)">
       <!-- activate gives me a component reference in order to use it -->

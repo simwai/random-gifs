@@ -76,6 +76,8 @@ input:focus {
   outline: unset !important;
 }
 
-.color-hover:hover, a:hover {
+.selected-color, 
+.color-hover:hover, 
+a:hover {
   color: var(--bg-color);
 }

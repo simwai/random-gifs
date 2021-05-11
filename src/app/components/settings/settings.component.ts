@@ -1,4 +1,4 @@
-import { Component, Input } from '@angular/core'
+import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { LocalStorage } from 'ngx-webstorage'
 
 import { environment } from 'src/environments/environment'
@@ -12,6 +12,8 @@ import { environment } from 'src/environments/environment'
   }
 })
 export class SettingsComponent {
+  @Output() public readonly intervalChanged = new EventEmitter<number>()
+
   // @LocalStorage('bgColor') private readonly _bgColor: string
   @LocalStorage('interval') private _interval: number
 
@@ -44,6 +46,8 @@ export class SettingsComponent {
     // test if word
     if (/\d/g.test(value.toString())) {
       this._interval = value * 1000
+
+      this.intervalChanged.emit(this._interval)
 
       // this._appRef.tick()
 
