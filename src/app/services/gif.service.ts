@@ -12,27 +12,25 @@ import { environment } from '../../environments/environment'
 })
 export class GifService {
   public gifs: string[] = []
+  public offset = 0
   private readonly _gifAmount: number = 50
-  private _offset: number
   private lastKeyword: string
 
   constructor(
     private readonly _http: HttpClient
-  ) {
-   this._offset = 0
-  }
+  ) {}
 
-  public getGifs(keyword: string, amount?: number, offset?: number): Observable<string[]> {
+  public getGifs(keyword: string, gifAmount?: number): Observable<string[]> {
     if (this.lastKeyword !== keyword) {
       this.gifs = []
-      this._offset = 0
+      this.offset = 0
     }
 
     this.lastKeyword = keyword
 
     const response$ = this._http.get<any>(
       'https://api.giphy.com/v1/gifs/search?api_key='
-    + environment.giphyApiKey + '&q=' + keyword + '&limit=' + (amount ?? this._gifAmount) + '&rating=PG&offset=' + (offset ?? this._offset))
+    + environment.giphyApiKey + '&q=' + keyword + '&limit=' + (gifAmount ?? this._gifAmount) + '&rating=PG&offset=' + this.offset)
 
     const observer = response$.pipe(
       tap(gifObject =>
@@ -48,9 +46,13 @@ export class GifService {
       })
     )
 
-    console.log(this._offset)
+    console.log(this.offset)
 
-    this._offset += amount ?? this._gifAmount
+    if (gifAmount) {
+      this.offset += gifAmount
+    } else {
+      this.offset += this._gifAmount
+    }
 
     return observer
   }

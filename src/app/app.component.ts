@@ -54,8 +54,7 @@ export class AppComponent {
   public onKeywordChanged(_keyword: string): void {
     this.carouselNav.index = 0
 
-    // don't need to pass keyword because it is in the localstorage
-    this.carouselNav.loadGifs()
+    this.carouselNav.loadGifs(true)
   }
 
   public onIntervalChanged(_interval: number): void {

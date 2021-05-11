@@ -35,6 +35,7 @@ export class CarouselNavigationComponent implements OnInit {
     private readonly _sharedVarsService: SharedVarsService
   ) {}
 
+  // TODO check if behavior changes when i bind to a variable
   @Input() public get currentGif(): string {
     console.log(this.gifs[this.index])
 
@@ -60,30 +61,32 @@ export class CarouselNavigationComponent implements OnInit {
     this.loadGifs()
   }
 
-  public loadGifs(): void {
+  public loadGifs(resetOffset?: boolean): void {
     let keyword = this._localStorageService.retrieve('keyword')
 
     if (!keyword) {
       keyword = environment.keyword
     }
 
+    if (resetOffset) {
+      this._gifService.offset = 0
+    }
+
     console.log(keyword)
     this._gifService
       .getGifs(keyword)
       .subscribe(data => {
-        // TODO if init overwrite instead concat
         if (this._init) {
           this.gifs = data
           this._init = false
+
+          this.restartInterval()
+          this._cdRef.detectChanges()
         } else {
           this.gifs = this.gifs.concat(data)
+
+          this._cdRef.detectChanges()
         }
-
-        // this.gifs = this._init ? data : this.gifs.concat(data)
-
-        // TODO is this interval correct?
-        this.restartInterval()
-        this._cdRef.detectChanges()
       }
     )
   }
@@ -92,10 +95,10 @@ export class CarouselNavigationComponent implements OnInit {
     // load gifs before the end is reached
     if (!this.gifs[this.index + 5]) {
       this.loadGifs()
+    } else {
+      this.restartInterval()
+      this.index++
     }
-
-    this.restartInterval()
-    this.index++
 
     console.log(this.index)
   }
@@ -114,30 +117,24 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public restartInterval(): void {
-    // TODO maybe not the correct position, maybe makes other code obsolete
-    // if (this._init) {
-    //   // this.index = 0
-    //   this._init = false
-    // }
-
     this._ngZone.runOutsideAngular(() => {
       if (this._intervalId) {
         clearInterval(this._intervalId)
       }
 
       this._intervalId = setInterval(() => {
-        this._ngZone.run(() => {
-          // if (!this.gifs[this.index + 1]) {
-          //   this.loadGifs()
-          // }
           if (!this.gifs[this.index + 5]) {
+            if (this._init) {
+              console.log('error in setInterval')
+            }
+
             this.loadGifs()
           }
 
           this.index++
-        })
+          this._cdRef.detectChanges()
 
-        console.log(this.index)
+          console.log(this.index)
       }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
     })
   }
