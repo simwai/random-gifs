@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, Input, NgZone, OnInit } from '@angular/core'
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 import { GifService } from 'src/app/services/gif.service'
 import { SharedVarsService } from 'src/app/services/shared-vars.service'
@@ -15,17 +15,18 @@ import { environment } from 'src/environments/environment'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselNavigationComponent implements OnInit {
+    // tslint:disable no-floating-promises
+
   // TODO Fix update problem for bgColor, changedetection, pass value from settingsComponent on bgColor set to bgColor$ in sharedVars
   // first look in old commits, should have worked before
   @LocalStorage('bgColor') public bgColor: string
 
-  public gifs: string[]
+  public gifs: string[] = []
 
-  // public isKeywordNew = false
-  private _index: number
+  private _index = 0
   private _intervalId: any
 
-  private _init: boolean
+  private  _isLoadGifsRunning = false
 
   constructor(
     private readonly _localStorageService: LocalStorageService,
@@ -36,7 +37,7 @@ export class CarouselNavigationComponent implements OnInit {
   ) {}
 
   // TODO check if behavior changes when i bind to a variable
-  @Input() public get currentGif(): string {
+  public get currentGif(): string {
     console.log(this.gifs[this.index])
 
     return this.gifs[this.index]
@@ -53,54 +54,48 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this._init = true
 
     this.gifs = []
-    this.index = 0
+    this.index = 0;
 
-    this.loadGifs()
+    (async () =>  {
+      await this.loadGifs()
+    })()
   }
 
-  public loadGifs(resetOffset?: boolean): void {
+  public async loadGifs(): Promise<void> {
+    // debounce in order to avoid obsolete call
+    this._isLoadGifsRunning = true
+
     let keyword = this._localStorageService.retrieve('keyword')
 
     if (!keyword) {
       keyword = environment.keyword
     }
 
-    if (resetOffset) {
-      this._gifService.offset = 0
-    }
+    // console.log(keyword)
+    const gifUrls = await this._gifService.getGifs(keyword).toPromise()
 
-    console.log(keyword)
-    this._gifService
-      .getGifs(keyword)
-      .subscribe(data => {
-        if (this._init) {
-          this.gifs = data
-          this._init = false
+    this.gifs = gifUrls
 
-          this.restartInterval()
-          this._cdRef.detectChanges()
-        } else {
-          this.gifs = this.gifs.concat(data)
+    this.restartInterval()
+    this._cdRef.detectChanges()
 
-          this._cdRef.detectChanges()
-        }
-      }
-    )
+    this._isLoadGifsRunning = false
   }
 
-  public nextGif(): void {
+  public async nextGif(): Promise<void> {
     // load gifs before the end is reached
-    if (!this.gifs[this.index + 5]) {
-      this.loadGifs()
+    if (!this.gifs[this.index + 5] && !this._isLoadGifsRunning) {
+      await this.loadGifs()
     } else {
       this.restartInterval()
-      this.index++
     }
 
+    this.index++
+
     console.log(this.index)
+    console.log('gifsLength: ' + this._gifService.gifs.length)
   }
 
   public previousGif(): void {
@@ -118,22 +113,14 @@ export class CarouselNavigationComponent implements OnInit {
 
   public restartInterval(): void {
     this._ngZone.runOutsideAngular(() => {
-      if (this._intervalId) {
-        clearInterval(this._intervalId)
-      }
+    clearInterval(this._intervalId)
 
-      this._intervalId = setInterval(() => {
+    this._intervalId = setInterval(async () => {
           if (!this.gifs[this.index + 5]) {
-            if (this._init) {
-              console.log('error in setInterval')
-            }
-
-            this.loadGifs()
+            await this.loadGifs()
           }
 
           this.index++
-          this._cdRef.detectChanges()
-
           console.log(this.index)
       }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
     })

@@ -4,6 +4,7 @@ import { RouterOutlet } from '@angular/router'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
 import { SettingsComponent } from './components/settings/settings.component'
+import { GifService } from './services/gif.service'
 
 @Component({
   selector: 'app-root',
@@ -40,6 +41,8 @@ export class AppComponent {
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
+  constructor(private readonly _gifService: GifService) {}
+
   // TODO test if this can be removed
   public onActivate(event: any): void {
     console.log(event)
@@ -51,10 +54,11 @@ export class AppComponent {
   }
 
   // get new gifs if keyword changes
-  public onKeywordChanged(_keyword: string): void {
+  public async onKeywordChanged(_keyword: string): Promise<void> {
     this.carouselNav.index = 0
+    this._gifService.offset = 0
 
-    this.carouselNav.loadGifs(true)
+    await this.carouselNav.loadGifs()
   }
 
   public onIntervalChanged(_interval: number): void {
@@ -90,7 +94,7 @@ export class AppComponent {
           if (direction[0] < 0) {
             console.log('left swipe')
 
-            this.carouselNav.nextGif()
+            await this.carouselNav.nextGif()
           }
 
           // Right swipe

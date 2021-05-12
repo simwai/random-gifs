@@ -46,7 +46,7 @@ export class GifService {
       })
     )
 
-    console.log(this.offset)
+    // console.log(this.offset)
 
     if (gifAmount) {
       this.offset += gifAmount
