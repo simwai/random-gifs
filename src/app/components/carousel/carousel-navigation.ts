@@ -1,8 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 import { GifService } from 'src/app/services/gif.service'
-import { SharedVarsService } from 'src/app/services/shared-vars.service'
-
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -15,10 +13,7 @@ import { environment } from 'src/environments/environment'
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselNavigationComponent implements OnInit {
-    // tslint:disable no-floating-promises
-
-  // TODO Fix update problem for bgColor, changedetection, pass value from settingsComponent on bgColor set to bgColor$ in sharedVars
-  // first look in old commits, should have worked before
+  // tslint:disable no-floating-promises
   @LocalStorage('bgColor') public bgColor: string
 
   public gifs: string[] = []
@@ -32,8 +27,7 @@ export class CarouselNavigationComponent implements OnInit {
     private readonly _localStorageService: LocalStorageService,
     private readonly _gifService: GifService,
     private readonly _ngZone: NgZone,
-    private readonly _cdRef: ChangeDetectorRef,
-    private readonly _sharedVarsService: SharedVarsService
+    private readonly _cdRef: ChangeDetectorRef
   ) {}
 
   // TODO check if behavior changes when i bind to a variable

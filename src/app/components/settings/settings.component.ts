@@ -13,24 +13,7 @@ import { environment } from 'src/environments/environment'
 })
 export class SettingsComponent {
   @Output() public readonly intervalChanged = new EventEmitter<number>()
-
-  // @LocalStorage('bgColor') private readonly _bgColor: string
   @LocalStorage('interval') private _interval: number
-
-  // public get bgColor(): string {
-  //   return this._bgColor
-  // }
-
-  // @Input() public set bgColor(value: string) {
-  //   if (!value) {
-  //     return
-  //   }
-
-  //   this._bgColor = value
-  //   document.documentElement.style.setProperty('--bg-color', value)
-
-  //   this._appRef.tick()
-  // }
 
   public get interval(): number {
     if (this._interval) {

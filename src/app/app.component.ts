@@ -32,7 +32,7 @@ import { GifService } from './services/gif.service'
 })
 export class AppComponent {
   // TODO test if viewchild this can be removed
-  // {static: false } is default
+  // { static: false } is default
   @ViewChild('carousel') public carouselNav: CarouselNavigationComponent
   @ViewChild('carousel') public settingsComponent: SettingsComponent
 
@@ -43,7 +43,6 @@ export class AppComponent {
 
   constructor(private readonly _gifService: GifService) {}
 
-  // TODO test if this can be removed
   public onActivate(event: any): void {
     console.log(event)
     if (event.constructor.name === 'CarouselNavigationComponent') { this.carouselNav = event}
@@ -62,7 +61,6 @@ export class AppComponent {
   }
 
   public onIntervalChanged(_interval: number): void {
-    // don't need to pass interval because it is in the localstorage
     this.carouselNav.restartInterval()
   }
 
