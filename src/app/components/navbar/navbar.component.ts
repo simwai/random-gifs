@@ -24,7 +24,7 @@ export class NavbarComponent implements OnInit {
   }
 
   @Input() public set keyword(value) {
-    if (this.keyword === value|| !value) { return }
+    if (this.keyword === value || !value) { return }
 
     this._keyword = value
 

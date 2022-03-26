@@ -21,7 +21,7 @@ export class CarouselNavigationComponent implements OnInit {
   private _index = 0
   private _intervalId: any
 
-  private  _isLoadGifsRunning = false
+  private _isLoadGifsRunning = false
 
   constructor(
     private readonly _localStorageService: LocalStorageService,
@@ -30,7 +30,6 @@ export class CarouselNavigationComponent implements OnInit {
     private readonly _cdRef: ChangeDetectorRef
   ) {}
 
-  // TODO check if behavior changes when i bind to a variable
   public get currentGif(): string {
     console.log(this.gifs[this.index])
 
@@ -48,7 +47,6 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-
     this.gifs = []
     this.index = 0;
 
@@ -58,16 +56,9 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public async loadGifs(): Promise<void> {
-    // debounce in order to avoid obsolete call
     this._isLoadGifsRunning = true
 
-    let keyword = this._localStorageService.retrieve('keyword')
-
-    if (!keyword) {
-      keyword = environment.keyword
-    }
-
-    // console.log(keyword)
+    const keyword = this._localStorageService.retrieve('keyword') ?? environment.keyword
     const gifUrls = await this._gifService.getGifs(keyword).toPromise()
 
     this.gifs = gifUrls

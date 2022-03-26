@@ -1,6 +1,7 @@
 import { animate, animateChild, query, style, transition, trigger } from '@angular/animations'
 import { Component, Input, ViewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
+import { LocalStorageService } from 'ngx-webstorage'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
 import { SettingsComponent } from './components/settings/settings.component'
@@ -41,7 +42,10 @@ export class AppComponent {
   private _swipeCoord?: [number, number]
   private _swipeTime?: number
 
-  constructor(private readonly _gifService: GifService) {}
+  constructor(
+    private readonly _gifService: GifService,
+    private readonly _localStorageService: LocalStorageService
+  ) {}
 
   public onActivate(event: any): void {
     console.log(event)
@@ -52,16 +56,14 @@ export class AppComponent {
     }
   }
 
-  // get new gifs if keyword changes
+  // Get new gifs if keyword changes
   public async onKeywordChanged(_keyword: string): Promise<void> {
     this.carouselNav.index = 0
     this._gifService.offset = 0
 
     await this.carouselNav.loadGifs()
-  }
 
-  public onIntervalChanged(_interval: number): void {
-    this.carouselNav.restartInterval()
+    console.log('Keyword changed to ' + _keyword)
   }
 
   // Here, the prepareRoute() method takes the value of the outlet directive (established through #outlet="outlet") and returns

@@ -16,11 +16,7 @@ export class SettingsComponent {
   @LocalStorage('interval') private _interval: number
 
   public get interval(): number {
-    if (this._interval) {
-      return this._interval / 1000
-    }
-
-    return environment.interval * 1000
+    return this._interval ? this._interval / 1000 : environment.interval
   }
 
   @Input() public set interval(value: number) {
