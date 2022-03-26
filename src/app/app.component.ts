@@ -1,7 +1,6 @@
 import { animate, animateChild, query, style, transition, trigger } from '@angular/animations'
 import { Component, Input, ViewChild } from '@angular/core'
 import { RouterOutlet } from '@angular/router'
-import { LocalStorageService } from 'ngx-webstorage'
 
 import { CarouselNavigationComponent } from './components/carousel/carousel-navigation'
 import { SettingsComponent } from './components/settings/settings.component'
@@ -43,8 +42,7 @@ export class AppComponent {
   private _swipeTime?: number
 
   constructor(
-    private readonly _gifService: GifService,
-    private readonly _localStorageService: LocalStorageService
+    private readonly _gifService: GifService
   ) {}
 
   public onActivate(event: any): void {
@@ -56,7 +54,7 @@ export class AppComponent {
     }
   }
 
-  // Get new gifs if keyword changes
+  // get new gifs if keyword changes
   public async onKeywordChanged(_keyword: string): Promise<void> {
     this.carouselNav.index = 0
     this._gifService.offset = 0
