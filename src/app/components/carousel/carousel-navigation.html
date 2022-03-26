@@ -1,5 +1,6 @@
 
-<div class="flex flex-col md:flex-row justify-evenly items-center h-full w-full" *ngIf="this.gifs.length > 0; else keywordNotFound">
+<!-- TODO wanna go back when i have not more gifs for the set keyboard and see another error than keywordNotFound -->
+<div class="flex flex-col md:flex-row justify-evenly items-center h-full w-full" *ngIf="currentGif; else keywordNotFound">
   <div class="flex-col hidden md:flex">
     <div class="cursor-pointer">
       <svg-icon class="selected-color" key="arrow-left-bold-box" (click)="previousGif()" fontSize="4rem"></svg-icon>
