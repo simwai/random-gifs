@@ -31,10 +31,8 @@ import { GifService } from './services/gif.service'
   ]
 })
 export class AppComponent {
-  // TODO test if viewchild this can be removed
-  // { static: false } is default
-  @ViewChild('carousel') public carouselNav: CarouselNavigationComponent
-  @ViewChild('carousel') public settingsComponent: SettingsComponent
+  public carouselNav: CarouselNavigationComponent
+  public settingsComponent: SettingsComponent
 
   @Input() public isAlternative: boolean
 
@@ -49,13 +47,14 @@ export class AppComponent {
     console.log(event)
     if (event.constructor.name === 'CarouselNavigationComponent') { this.carouselNav = event}
     if (event.constructor.name === 'SettingsComponent') {
-      this.settingsComponent = event
-      this.settingsComponent.intervalChanged.subscribe(_interval => this.carouselNav.restartInterval())
+      event.intervalChanged.subscribe(_interval => this.carouselNav.restartInterval())
     }
   }
 
   // get new gifs if keyword changes
   public async onKeywordChanged(_keyword: string): Promise<void> {
+    if (!this.carouselNav) { return }
+
     this.carouselNav.index = 0
     this._gifService.offset = 0
 
@@ -72,12 +71,10 @@ export class AppComponent {
   }
 
   public async swipe(event: TouchEvent, when: string): Promise<void> {
+    if (!this.carouselNav) { return }
+
     const coord: [number, number] = [event.changedTouches[0].clientX, event.changedTouches[0].clientY]
     const time = new Date().getTime()
-
-    if (!this.carouselNav) {
-      return
-    }
 
     if (when === 'start') {
       this._swipeCoord = coord

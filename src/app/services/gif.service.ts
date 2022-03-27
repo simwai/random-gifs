@@ -44,13 +44,7 @@ export class GifService {
       })
     )
 
-    // console.log(this.offset)
-
-    if (gifAmount) {
-      this.offset += gifAmount
-    } else {
-      this.offset += this._gifAmount
-    }
+    this.offset += gifAmount ?? this._gifAmount
 
     return observer
   }

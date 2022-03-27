@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "start": "ng serve",
+    "start-prod": "ng serve --prod",
     "start-4201": "ng serve -o --port 4201",
     "build": "ng build --prod",
     "test": "ng test",

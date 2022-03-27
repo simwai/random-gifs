@@ -31,8 +31,6 @@ export class CarouselNavigationComponent implements OnInit {
   ) {}
 
   public get currentGif(): string {
-    console.log(this.gifs[this.index])
-
     return this.gifs[this.index]
   }
 

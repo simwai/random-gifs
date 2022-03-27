@@ -5,7 +5,6 @@
 </ng-container>
 
 <ng-template #primary>
-
   <div class="flex flex-row justify-center items-center h-auto w-full">
     <input #searchInput type="text" class="w-2/3" placeholder="Search for a gif" (keyup.enter)="keyword = searchInput.value">
     <svg-icon (click)="keyword = searchInput.value" key="magnify" fontSize="40px" class="cursor-pointer color-hover ml-3"></svg-icon>
