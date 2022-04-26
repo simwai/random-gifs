@@ -13,7 +13,3 @@ If you want to use it, just create the file "api-key.json" in the apps folder an
 * Arrow right -> Go forward
 * Mouse over gif -> Pause
 * Enter -> Settings
-
-**Bug:**  
-
-8 s loading screen at the start. We are here on GitHub, so feel free to fix it. You would help me a lot. :-)
