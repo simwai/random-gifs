@@ -6,8 +6,8 @@
     "source.fixAll.eslint": false
   },
   "eslint.format.enable": false,
-  "angular.experimental-ivy": true,
   "tslint.jsEnable": true,
+  "tslint.autoFixOnSave": true,
   "stylelint.enable": true,
   "css.validate": false,
   "less.validate": false,
