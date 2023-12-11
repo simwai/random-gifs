@@ -1,15 +1,18 @@
-<div class="p-6 h-100-vh w-100-vw" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')">
+<div class="h-100-vh w-100-vw" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')"
+  (document:keydown.arrowRight)="carouselNav.nextGif()" (document:keydown.arrowLeft)="carouselNav.previousGif()">
   <div class="flex flex-col items-center h-full justify-around w-full">
     <div class="flex flex-row h-1/6 items-center justify-center w-full">
       <navbar (keywordChanged)="onKeywordChanged($event)" class="width-10"></navbar>
     </div>
-    <div class="flex flex-row h-4/6 items-center justify-center w-full overflow-hidden" [@routeAnimations]="prepareRoute(outlet)">
+    <div class="flex flex-row h-4/6 items-center justify-center w-full overflow-hidden"
+      [@routeAnimations]="prepareRoute(outlet)">
       <!-- activate gives me a component reference in order to use it -->
       <router-outlet #outlet="outlet" (activate)="onActivate($event)"></router-outlet>
     </div>
     <div class="flex flex-row h-1/6 items-center justify-center w-full">
       <div class="pr-2 color-hover">Made with love by simwai</div>
-      <a href="https://github.com/simwai/random-gifs" class="flex"><svg-icon key="github" fontSize="20px"></svg-icon></a>
+      <a href="https://github.com/simwai/random-gifs" class="flex"><svg-icon key="github"
+          fontSize="20px"></svg-icon></a>
     </div>
   </div>
 </div>
