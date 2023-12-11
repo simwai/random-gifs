@@ -8,7 +8,7 @@
       "type": "chrome",
       "request": "launch",
       "name": "Launch Chrome against localhost",
-      "url": "http://localhost:4200",
+      "url": "http://localhost:65000",
       "webRoot": "${workspaceFolder}",
       "skipFiles": [
         "${webRoot}/node_modules/**/*.js",
@@ -19,7 +19,7 @@
       "type": "chrome",
       "request": "launch",
       "preLaunchTask": "npm: start",
-      "url": "http://localhost:4200/#",
+      "url": "http://localhost:65000",
       "webRoot": "${workspaceFolder}",
       "sourceMapPathOverrides": {
         "webpack:/*": "${webRoot}/*",
