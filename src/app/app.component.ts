@@ -41,11 +41,11 @@ export class AppComponent {
 
   constructor(
     private readonly _gifService: GifService
-  ) {}
+  ) { }
 
   public onActivate(event: any): void {
     console.log(event)
-    if (event.constructor.name === 'CarouselNavigationComponent') { this.carouselNav = event}
+    if (event.constructor.name === 'CarouselNavigationComponent') { this.carouselNav = event }
     if (event.constructor.name === 'SettingsComponent') {
       event.intervalChanged.subscribe(_interval => this.carouselNav.restartInterval())
     }
@@ -56,7 +56,7 @@ export class AppComponent {
     if (!this.carouselNav) { return }
 
     this.carouselNav.index = 0
-    this._gifService.offset = 0
+    this._gifService.reset()
 
     await this.carouselNav.loadGifs()
 
@@ -67,7 +67,7 @@ export class AppComponent {
   // a string value representing the state of the animation based on the custom data of the current active route.
   // You can use this data to control which transition to execute for each route.
   public prepareRoute(outlet: RouterOutlet): any {
-    return outlet && outlet.activatedRouteData && outlet.activatedRouteData.animation
+    return outlet?.activatedRouteData?.animation
   }
 
   public async swipe(event: TouchEvent, when: string): Promise<void> {
