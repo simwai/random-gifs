@@ -6,17 +6,19 @@ module.exports = {
   theme: {
     extend: {
       maxWidth: {
-        "1/3-vw": 100 / 3 + "vw",
+        "75": "75%"
       },
       width: {
-        "70-vw": "70vw",
-        "80-vw": "80vw",
         "100-vw": "100vw"
       },
+      minWidth: {
+        "half": "50%"
+      },
       height: {
-        "70-vh": "70vh",
-        "40-vh": "40vh",
         "100-vh": "100vh"
+      },
+      maxHeight: {
+        "75": "75%"
       }
     },
     colors: {

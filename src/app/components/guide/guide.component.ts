@@ -5,7 +5,7 @@ import { Component } from '@angular/core'
   templateUrl: './guide.component.html',
   styleUrls: ['./guide.component.scss'],
   host: {
-    class: 'h-full'
+    class: 'flex flex-col h-full w-100-vw justify-center items-center'
   }
 })
 export class GuideComponent {

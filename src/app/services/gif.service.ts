@@ -11,41 +11,55 @@ import { environment } from '../../environments/environment'
 export class GifService {
   public gifs: string[] = []
   public offset = 0
-  private readonly _gifAmount: number = 50
+  public noGifsFound = false
+  public readonly gifBufferLength = 50
   private lastKeyword: string
 
   constructor(
     private readonly _http: HttpClient
-  ) {}
+  ) { }
 
-  public getGifs(keyword: string, gifAmount?: number): Observable<string[]> {
+  public reset(): void {
+    this.gifs = []
+    this.offset = 0
+  }
+
+  public getGifs(keyword: string): Observable<string[]> {
     if (this.lastKeyword !== keyword) {
-      this.gifs = []
-      this.offset = 0
+      this.reset()
     }
 
     this.lastKeyword = keyword
 
     const response$ = this._http.get<any>(
       'https://api.giphy.com/v1/gifs/search?api_key='
-    + environment.giphyApiKey + '&q=' + keyword + '&limit=' + (gifAmount ?? this._gifAmount) + '&rating=PG&offset=' + this.offset)
+      + environment.giphyApiKey + '&q=' + keyword + '&limit=' + this.gifBufferLength + '&rating=PG&offset=' + this.offset)
 
     const observer = response$.pipe(
-      tap(gifObject =>
+      tap(gifObject => {
         console.log(gifObject)
-      ),
+        this.noGifsFound = gifObject.data.length === 0
+      }),
       map((gifObject: any): string[] => {
         for (const value of gifObject.data) {
-          this.gifs.push(value.images.original.url as string)
+          const url = value.images.original.url as string
+          // Check if the URL already exists in the array
+          if (!this.gifs.includes(url)) {
+            this.gifs.push(url)
+          }
         }
 
-        // TODO string[] to set, i wanna avoid duplicates!!
+        while (this.gifs.length > this.gifBufferLength) {
+          this.gifs.shift()  // Remove the oldest image from the array
+        }
+
         return this.gifs
       })
     )
 
-    this.offset += gifAmount ?? this._gifAmount
+    this.offset += this.gifBufferLength
 
     return observer
   }
+
 }

@@ -1,5 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
+import { Subject } from 'rxjs'
+import { debounceTime } from 'rxjs/operators'
 import { GifService } from 'src/app/services/gif.service'
 import { environment } from 'src/environments/environment'
 
@@ -8,27 +10,28 @@ import { environment } from 'src/environments/environment'
   templateUrl: './carousel-navigation.html',
   styleUrls: ['./carousel-navigation.scss'],
   host: {
-    class: 'h-full flex flex-col justify-center items-center'
+    class: 'flex flex-col w-full h-full justify-center items-center'
   },
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class CarouselNavigationComponent implements OnInit {
-  // tslint:disable no-floating-promises
   @LocalStorage('bgColor') public bgColor: string
-
   public gifs: string[] = []
-
   private _index = 0
   private _intervalId: any
-
   private _isLoadGifsRunning = false
+  private nextGifSubject = new Subject<string>()
+  private previousGifSubject = new Subject<string>()
 
   constructor(
+    public readonly gifService: GifService,
     private readonly _localStorageService: LocalStorageService,
-    private readonly _gifService: GifService,
     private readonly _ngZone: NgZone,
     private readonly _cdRef: ChangeDetectorRef
-  ) {}
+  ) {
+    this.nextGifSubject.pipe(debounceTime(300)).subscribe(async () => this.nextGif())
+    this.previousGifSubject.pipe(debounceTime(300)).subscribe(() => this.previousGif())
+  }
 
   public get currentGif(): string {
     return this.gifs[this.index]
@@ -39,73 +42,69 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public set index(value: number) {
+    if (value < 0 || value >= this.gifService.gifBufferLength) {
+      return
+    }
     this._index = value
-
     this._cdRef.detectChanges()
   }
 
-  public ngOnInit(): void {
-    this.gifs = []
-    this.index = 0;
-
-    (async () =>  {
-      await this.loadGifs()
-    })()
+  public async ngOnInit(): Promise<void> {
+    await this.loadGifs()
+    this.restartInterval()
   }
 
   public async loadGifs(): Promise<void> {
+    if (this._isLoadGifsRunning) { return }
     this._isLoadGifsRunning = true
 
     const keyword = this._localStorageService.retrieve('keyword') ?? environment.keyword
-    const gifUrls = await this._gifService.getGifs(keyword).toPromise()
-
-    this.gifs = gifUrls
-
-    this.restartInterval()
-    this._cdRef.detectChanges()
+    this.gifs = await this.gifService.getGifs(keyword).toPromise()
 
     this._isLoadGifsRunning = false
   }
 
-  public async nextGif(): Promise<void> {
-    // load gifs before the end is reached
-    if (!this.gifs[this.index + 5] && !this._isLoadGifsRunning) {
-      await this.loadGifs()
-    } else {
-      this.restartInterval()
-    }
-
-    this.index++
-
-    console.log(this.index)
-    console.log('gifsLength: ' + this._gifService.gifs.length)
+  public triggerNextGif(): void {
+    this.nextGifSubject.next()
   }
 
-  public previousGif(): void {
-    if ((this.index - 1) < 0) {
-      console.log(this.index)
-
-      return
-    }
-
-    this.restartInterval()
-    this.index--
-
-    console.log(this.index)
+  public triggerPreviousGif(): void {
+    this.previousGifSubject.next()
   }
 
   public restartInterval(): void {
     this._ngZone.runOutsideAngular(() => {
-    clearInterval(this._intervalId)
+      clearInterval(this._intervalId)
 
-    this._intervalId = setInterval(async () => {
-          if (!this.gifs[this.index + 5]) {
-            await this.loadGifs()
-          }
-
-          this.index++
-          console.log(this.index)
+      this._intervalId = setInterval(async () => {
+        await this.nextGif()
       }, this._localStorageService.retrieve('interval') ?? environment.interval * 1000)
     })
+  }
+
+  public async nextGif(): Promise<void> {
+    if (this._isLoadGifsRunning) { return }
+
+    if (this.index >= (this.gifService.gifBufferLength - 5)) {
+      await this.loadGifs()
+      this.index = 0
+      console.log('Loading gifs triggered by nextGif()')
+    }
+
+    this.restartInterval()
+
+    this.index++
+    console.log('Next gif index:', this.index)
+    console.log('GifsLength: ', this.gifService.gifs.length)
+  }
+
+  public previousGif(): void {
+    if (this._isLoadGifsRunning) { return }
+
+    this.index--
+    this.restartInterval()
+
+    console.log('Previous gif index:', this.index)
+    console.log('GifsLength: ', this.gifService.gifs.length)
   }
 }

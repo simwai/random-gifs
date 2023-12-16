@@ -1,29 +1,35 @@
+<div class="flex flex-row w-full h-full">
+  <ng-template [ngIf]="!gifService.noGifsFound">
+    <div class="flex flex-col lg:flex-row justify-evenly items-center h-full w-auto m-auto min-w-half">
+      <div *ngIf="currentGif" class="lg:flex lg:flex-col hidden h-1/6">
+        <div class="cursor-pointer flex justify-center items-center">
+          <svg-icon class="selected-color max-w-75" key="arrow-left-bold-box" (click)="previousGif()"
+            fontSize="4rem"></svg-icon>
+        </div>
+      </div>
 
-<!-- TODO wanna go back when i have not more gifs for the set keyboard and see another error than keywordNotFound -->
-<div class="flex flex-col md:flex-row justify-evenly items-center h-full w-full" *ngIf="currentGif; else keywordNotFound">
-  <div class="flex-col hidden md:flex">
-    <div class="cursor-pointer">
-      <svg-icon class="selected-color" key="arrow-left-bold-box" (click)="previousGif()" fontSize="4rem"></svg-icon>
-    </div>
-  </div>
+      <div *ngIf="currentGif" class="flex flex-col justify-center items-center h-4/6 w-full">
+        <img class="rounded-lg m-auto max-w-75 max-h-75" [src]="currentGif">
+      </div>
 
-  <div class="flex flex-col justify-center items-center carousel-img-wrapper">
-    <img class="rounded-md" [src]="currentGif">
-  </div>
+      <div class="flex flex-row lg:flex-col h-1/6" *ngIf="currentGif">
+        <div class="cursor-pointer hidden lg:flex justify-center items-start">
+          <svg-icon class="selected-color max-w-75" key="arrow-right-bold-box" (click)="nextGif()"
+            fontSize="4rem"></svg-icon>
+        </div>
+        <div class="pr-5 cursor-pointer lg:hidden inline-flex justify-center items-center">
+          <svg-icon class="selected-color max-w-75" key="arrow-left-bold-box" (click)="previousGif()"
+            fontSize="3rem"></svg-icon>
+        </div>
+        <div class="cursor-pointer lg:hidden inline-flex justify-center items-center">
+          <svg-icon class="selected-color max-w-75" key="arrow-right-bold-box" (click)="nextGif()"
+            fontSize="3rem"></svg-icon>
+        </div>
+      </div>
+    </div>
+  </ng-template>
 
-  <div class="flex flex-row md:flex-col">
-    <div class="cursor-pointer hidden md:flex">
-      <svg-icon class="selected-color" key="arrow-right-bold-box" (click)="nextGif()" fontSize="4rem"></svg-icon>
-    </div>
-    <div class="pr-5 cursor-pointer md:hidden inline-flex">
-      <svg-icon class="selected-color" key="arrow-left-bold-box" (click)="previousGif()" fontSize="3rem"></svg-icon>
-    </div>
-    <div class="cursor-pointer md:hidden inline-flex">
-      <svg-icon class="selected-color" key="arrow-right-bold-box" (click)="nextGif()" fontSize="3rem"></svg-icon>
-    </div>
-  </div>
+  <ng-template [ngIf]="gifService.noGifsFound">
+    <div class="flex flex-col w-full justify-center items-center">No gifs found</div>
+  </ng-template>
 </div>
-
-<ng-template #keywordNotFound>
-  <div class="flex flex-col justify-center items-center">Keyword not found</div>
-</ng-template>

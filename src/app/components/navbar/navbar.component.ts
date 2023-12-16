@@ -1,6 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { AfterViewInit, Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
+import { fromEvent, Subscription } from 'rxjs'
+import { debounceTime, map } from 'rxjs/operators'
 
 import { environment } from 'src/environments/environment'
 
@@ -9,15 +11,17 @@ import { environment } from 'src/environments/environment'
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss']
 })
-export class NavbarComponent implements OnInit {
+export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() public readonly keywordChanged = new EventEmitter<string>()
+  @ViewChild('searchInput') public searchInput: ElementRef
+  private subscriptions = new Subscription()
 
   @LocalStorage('keyword') private _keyword: string
 
   constructor(
     private readonly _router: Router,
     private readonly _localStorageService: LocalStorageService
-  ) {}
+  ) { }
 
   public get keyword(): string {
     return this._keyword ?? environment.keyword
@@ -42,7 +46,7 @@ export class NavbarComponent implements OnInit {
       return true
     }
 
-    if (currentPage  === '/carousel') {
+    if (currentPage === '/carousel') {
       return false
     }
 
@@ -58,5 +62,30 @@ export class NavbarComponent implements OnInit {
     if (bgColor) {
       document.documentElement.style.setProperty('--bg-color', bgColor)
     }
+  }
+
+  public ngAfterViewInit(): void {
+    this.subscriptions.add(
+      fromEvent(this.searchInput.nativeElement, 'keyup')
+        .pipe(
+          map((event: any) => event.target.value),
+          debounceTime(3000)
+        )
+        .subscribe(search => {
+          this.keyword = search
+        })
+    )
+
+    this.subscriptions.add(
+      fromEvent(this.searchInput.nativeElement, 'blur')
+        .pipe(map((event: any) => event.target.value))
+        .subscribe(search => {
+          this.keyword = search
+        })
+    )
+  }
+
+  public ngOnDestroy(): void {
+    this.subscriptions.unsubscribe()
   }
 }
