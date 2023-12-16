@@ -5,6 +5,5 @@
 }
 
 .active-color-item {
-  // border: 1px solid theme("colors.grey");
   box-shadow: 0 0 1em var(--bg-color, theme("colors.grey"));
 }
