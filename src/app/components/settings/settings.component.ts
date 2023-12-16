@@ -8,11 +8,13 @@ import { environment } from 'src/environments/environment'
   templateUrl: './settings.component.html',
   styleUrls: ['./settings.component.scss'],
   host: {
-    class: 'h-full'
+    class: 'flex h-full w-100-vw justify-content items-center'
   }
 })
 export class SettingsComponent {
   @Output() public readonly intervalChanged = new EventEmitter<number>()
+  public errorMessage = ''
+
   @LocalStorage('interval') private _interval: number
 
   public get interval(): number {
@@ -27,13 +29,9 @@ export class SettingsComponent {
       this._interval = value * 1000
 
       this.intervalChanged.emit(this._interval)
-
-      // this._appRef.tick()
-
-      // TODO solve this
-      // this._slideshowService.restartInterval()
+      this.errorMessage = ''
     } else {
-      // TODO showError()
+      this.errorMessage = 'Please enter digits only!'
     }
   }
 }
