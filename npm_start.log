@@ -1,0 +1,41 @@
+
+> random-gifs@1.0.0 start
+> ng serve -o --port 65000
+
+(node:7933) [DEP0040] DeprecationWarning: The `punycode` module is deprecated. Please use a userland alternative instead.
+(Use `node --trace-deprecation ...` to show where the warning was created)
+Compiling @angular/animations : es2015 as esm2015
+Compiling @angular/forms : es2015 as esm2015
+Compiling @angular/router : es2015 as esm2015
+Compiling @angular/animations/browser : es2015 as esm2015
+Compiling @angular/platform-browser/animations : es2015 as esm2015
+- Generating browser application bundles...
+(node:7933) [DEP0060] DeprecationWarning: The `util._extend` API is deprecated. Please use Object.assign() instead.
+✔ Browser application bundle generation complete.
+
+Initial Chunk Files | Names         |      Size
+vendor.js           | vendor        |   3.44 MB
+styles.css          | styles        |   2.26 MB
+polyfills.js        | polyfills     | 182.05 kB
+main.js             | main          |  78.76 kB
+runtime.js          | runtime       |   6.15 kB
+
+| Initial Total |   5.95 MB
+
+Build at: 2026-03-25T01:53:07.612Z - Hash: 24045a6a24459cf9b5e4 - Time: 19617ms
+
+** Angular Live Development Server is listening on localhost:65000, open your browser on http://localhost:65000/ **
+
+
+✔ Compiled successfully.
+- Generating browser application bundles...
+✔ Browser application bundle generation complete.
+
+Initial Chunk Files | Names  |    Size
+styles.css          | styles | 2.26 MB
+
+4 unchanged chunks
+
+Build at: 2026-03-25T01:53:12.768Z - Hash: 73d7733e56534d1e6c46 - Time: 3658ms
+
+✔ Compiled successfully.
