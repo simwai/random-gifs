@@ -50,3 +50,27 @@ main.js             | main  | 78.78 kB
 Build at: 2026-03-25T01:58:27.984Z - Hash: b97112fdca9f95b9b694 - Time: 8595ms
 
 ✔ Compiled successfully.
+- Generating browser application bundles...
+/app/node_modules/@angular/compiler-cli/src/ngtsc/reflection/src/typescript.js:414
+            throw new Error("Cannot resolve type entity " + type.getText() + " to symbol");
+                  ^
+
+Error: Cannot resolve type entity ɵngcc1.CommonModule to symbol
+    at Object.reflectTypeEntityToDeclaration (/app/node_modules/@angular/compiler-cli/src/ngtsc/reflection/src/typescript.js:414:19)
+    at /app/node_modules/@angular/compiler-cli/src/ngtsc/metadata/src/util.js:34:35
+    at Array.map (<anonymous>)
+    at Object.extractReferencesFromType (/app/node_modules/@angular/compiler-cli/src/ngtsc/metadata/src/util.js:29:29)
+    at DtsMetadataReader.getNgModuleMetadata (/app/node_modules/@angular/compiler-cli/src/ngtsc/metadata/src/dts.js:62:33)
+    at MetadataDtsModuleScopeResolver.resolve (/app/node_modules/@angular/compiler-cli/src/ngtsc/scope/src/dependency.js:61:43)
+    at LocalModuleScopeRegistry.getExportedScope (/app/node_modules/@angular/compiler-cli/src/ngtsc/scope/src/local.js:515:51)
+    at LocalModuleScopeRegistry.getScopeOfModuleReference (/app/node_modules/@angular/compiler-cli/src/ngtsc/scope/src/local.js:257:44)
+    at LocalModuleScopeRegistry.getScopeOfModule (/app/node_modules/@angular/compiler-cli/src/ngtsc/scope/src/local.js:148:22)
+    at LocalModuleScopeRegistry.getScopeForComponent (/app/node_modules/@angular/compiler-cli/src/ngtsc/scope/src/local.js:122:22)
+    at ComponentDecoratorHandler.resolve (/app/node_modules/@angular/compiler-cli/src/ngtsc/annotations/src/component.js:439:42)
+    at TraitCompiler.resolve (/app/node_modules/@angular/compiler-cli/src/ngtsc/transform/src/compilation.js:409:50)
+    at NgCompiler.resolveCompilation (/app/node_modules/@angular/compiler-cli/src/ngtsc/core/src/compiler.js:543:27)
+    at NgCompiler.<anonymous> (/app/node_modules/@angular/compiler-cli/src/ngtsc/core/src/compiler.js:424:34)
+    at step (/app/node_modules/tslib/tslib.js:143:27)
+    at Object.next (/app/node_modules/tslib/tslib.js:124:57)
+
+Node.js v22.22.1
