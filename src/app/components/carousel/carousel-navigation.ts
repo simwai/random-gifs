@@ -6,13 +6,14 @@ import { GifService } from 'src/app/services/gif.service'
 import { environment } from 'src/environments/environment'
 
 @Component({
-  selector: 'carousel-navigation',
-  templateUrl: './carousel-navigation.html',
-  styleUrls: ['./carousel-navigation.scss'],
-  host: {
-    class: 'flex flex-col w-full h-full justify-center items-center'
-  },
-  changeDetection: ChangeDetectionStrategy.OnPush
+    selector: 'carousel-navigation',
+    templateUrl: './carousel-navigation.html',
+    styleUrls: ['./carousel-navigation.scss'],
+    host: {
+        class: 'flex flex-col w-full h-full justify-center items-center'
+    },
+    changeDetection: ChangeDetectionStrategy.OnPush,
+    standalone: false
 })
 export class CarouselNavigationComponent implements OnInit {
   @LocalStorage('bgColor') public bgColor: string
