@@ -1,0 +1,8 @@
+{
+  "$schema": "https://unpkg.com/knip@next/schema.json",
+  "project": ["src/**/*.ts"],
+  "ignore": ["src/app/svg/*.ts", "src/environments/*.ts", "src/styles.scss.d.ts"],
+  "ignoreDependencies": [
+    "@fontsource/*"
+  ]
+}
