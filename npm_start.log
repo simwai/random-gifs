@@ -39,3 +39,14 @@ styles.css          | styles | 2.26 MB
 Build at: 2026-03-25T01:53:12.768Z - Hash: 73d7733e56534d1e6c46 - Time: 3658ms
 
 ✔ Compiled successfully.
+- Generating browser application bundles...
+✔ Browser application bundle generation complete.
+
+Initial Chunk Files | Names |     Size
+main.js             | main  | 78.78 kB
+
+4 unchanged chunks
+
+Build at: 2026-03-25T01:58:27.984Z - Hash: b97112fdca9f95b9b694 - Time: 8595ms
+
+✔ Compiled successfully.
