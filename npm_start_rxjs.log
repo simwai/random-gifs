@@ -1,0 +1,85 @@
+
+> random-gifs@1.0.0 start
+> ng serve -o --port 65000
+
+- Generating browser application bundles (phase: setup)...
+✔ Browser application bundle generation complete.
+
+Initial chunk files   | Names         |  Raw size
+vendor.js             | vendor        |   3.84 MB |
+styles.css, styles.js | styles        |   1.85 MB |
+polyfills.js          | polyfills     | 241.65 kB |
+main.js               | main          |  76.87 kB |
+runtime.js            | runtime       |   6.92 kB |
+
+                      | Initial total |   6.02 MB
+
+Build at: 2026-03-27T06:49:26.923Z - Hash: 6e4b6564e93c5cae - Time: 21626ms
+
+./src/styles.scss - Warning: Module Warning (from ./node_modules/sass-loader/dist/cjs.js):
+Deprecation Warning on line 0, column 8 of file:///app/src/styles.scss:0:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+0 | @import "tailwindcss/base";
+
+
+src/styles.scss 1:9  root stylesheet
+
+
+./src/styles.scss - Warning: Module Warning (from ./node_modules/sass-loader/dist/cjs.js):
+Deprecation Warning on line 1, column 8 of file:///app/src/styles.scss:1:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+1 | @import "tailwindcss/components";
+
+
+src/styles.scss 2:9  root stylesheet
+
+
+./src/styles.scss - Warning: Module Warning (from ./node_modules/sass-loader/dist/cjs.js):
+Deprecation Warning on line 2, column 8 of file:///app/src/styles.scss:2:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+2 | @import "tailwindcss/utilities";
+
+
+src/styles.scss 3:9  root stylesheet
+
+
+./src/styles.scss - Warning: Module Warning (from ./node_modules/sass-loader/dist/cjs.js):
+Deprecation Warning on line 4, column 8 of file:///app/src/styles.scss:4:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+4 | @import "@fontsource/roboto";
+
+
+src/styles.scss 5:9  root stylesheet
+
+
+./src/styles.scss - Warning: Module Warning (from ./node_modules/sass-loader/dist/cjs.js):
+Deprecation Warning on line 5, column 8 of file:///app/src/styles.scss:5:8:
+Sass @import rules are deprecated and will be removed in Dart Sass 3.0.0.
+
+More info and automated migrator: https://sass-lang.com/d/import
+
+5 | @import "@fontsource/montserrat";
+
+
+src/styles.scss 6:9  root stylesheet
+
+
+
+
+** Angular Live Development Server is listening on localhost:65000, open your browser on http://localhost:65000/ **
+
+
+✔ Compiled successfully.
+Terminated
