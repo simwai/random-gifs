@@ -1,6 +1,6 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
-import { Subject } from 'rxjs'
+import { Subject, firstValueFrom } from 'rxjs'
 import { debounceTime } from 'rxjs/operators'
 import { GifService } from 'src/app/services/gif.service'
 import { environment } from 'src/environments/environment'
@@ -12,7 +12,8 @@ import { environment } from 'src/environments/environment'
   host: {
     class: 'flex flex-col w-full h-full justify-center items-center'
   },
-  changeDetection: ChangeDetectionStrategy.OnPush
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  standalone: false
 })
 export class CarouselNavigationComponent implements OnInit {
   @LocalStorage('bgColor') public bgColor: string
@@ -20,8 +21,8 @@ export class CarouselNavigationComponent implements OnInit {
   private _index = 0
   private _intervalId: any
   private _isLoadGifsRunning = false
-  private nextGifSubject = new Subject<string>()
-  private previousGifSubject = new Subject<string>()
+  private nextGifSubject = new Subject<void>()
+  private previousGifSubject = new Subject<void>()
 
   constructor(
     public readonly gifService: GifService,
@@ -59,7 +60,7 @@ export class CarouselNavigationComponent implements OnInit {
     this._isLoadGifsRunning = true
 
     const keyword = this._localStorageService.retrieve('keyword') ?? environment.keyword
-    this.gifs = await this.gifService.getGifs(keyword).toPromise()
+    this.gifs = await firstValueFrom(this.gifService.getGifs(keyword))
 
     this._isLoadGifsRunning = false
   }

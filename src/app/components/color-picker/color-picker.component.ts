@@ -4,9 +4,10 @@ import { LocalStorage } from 'ngx-webstorage'
 import tailwindConfig from '../../../../tailwind.config.js'
 
 @Component({
-  selector: 'color-picker',
-  templateUrl: './color-picker.component.html',
-  styleUrls: ['./color-picker.component.scss']
+    selector: 'color-picker',
+    templateUrl: './color-picker.component.html',
+    styleUrls: ['./color-picker.component.scss'],
+    standalone: false
 })
 export class ColorPickerComponent {
   public colors: string[]

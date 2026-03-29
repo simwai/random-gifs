@@ -4,12 +4,13 @@ import { LocalStorage } from 'ngx-webstorage'
 import { environment } from 'src/environments/environment'
 
 @Component({
-  selector: 'settings',
-  templateUrl: './settings.component.html',
-  styleUrls: ['./settings.component.scss'],
-  host: {
-    class: 'flex h-full w-100-vw justify-content items-center'
-  }
+    selector: 'settings',
+    templateUrl: './settings.component.html',
+    styleUrls: ['./settings.component.scss'],
+    host: {
+        class: 'flex h-full w-100-vw justify-content items-center'
+    },
+    standalone: false
 })
 export class SettingsComponent {
   @Output() public readonly intervalChanged = new EventEmitter<number>()
