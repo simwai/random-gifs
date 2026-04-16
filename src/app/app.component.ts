@@ -7,28 +7,29 @@ import { SettingsComponent } from './components/settings/settings.component'
 import { GifService } from './services/gif.service'
 
 @Component({
-  selector: 'app-root',
-  templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss'],
-  animations: [
-    trigger('routeAnimations', [
-      transition('* => *', [
-        style({ position: 'relative' }),
-        query(':enter, :leave', [
-          style({
-            position: 'absolute',
-            transform: 'translateX(0)',
-            opacity: 0
-          })
-        ], { optional: true }),
-        query(':enter', animateChild(), { optional: true }),
-        query(':enter', [
-          animate('700ms ease-out'),
-          style({ opacity: 1 })
-        ], { optional: true })
-      ])
-    ])
-  ]
+    selector: 'app-root',
+    templateUrl: './app.component.html',
+    styleUrls: ['./app.component.scss'],
+    animations: [
+        trigger('routeAnimations', [
+            transition('* => *', [
+                style({ position: 'relative' }),
+                query(':enter, :leave', [
+                    style({
+                        position: 'absolute',
+                        transform: 'translateX(0)',
+                        opacity: 0
+                    })
+                ], { optional: true }),
+                query(':enter', animateChild(), { optional: true }),
+                query(':enter', [
+                    animate('700ms ease-out'),
+                    style({ opacity: 1 })
+                ], { optional: true })
+            ])
+        ])
+    ],
+    standalone: false
 })
 export class AppComponent {
   public carouselNav: CarouselNavigationComponent

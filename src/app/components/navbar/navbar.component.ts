@@ -7,9 +7,10 @@ import { debounceTime, map } from 'rxjs/operators'
 import { environment } from 'src/environments/environment'
 
 @Component({
-  selector: 'navbar',
-  templateUrl: './navbar.component.html',
-  styleUrls: ['./navbar.component.scss']
+    selector: 'navbar',
+    templateUrl: './navbar.component.html',
+    styleUrls: ['./navbar.component.scss'],
+    standalone: false
 })
 export class NavbarComponent implements OnInit, AfterViewInit, OnDestroy {
   @Output() public readonly keywordChanged = new EventEmitter<string>()

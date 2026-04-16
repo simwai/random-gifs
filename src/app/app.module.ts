@@ -1,4 +1,4 @@
-import { HttpClientModule } from '@angular/common/http'
+import { provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { BrowserModule } from '@angular/platform-browser'
@@ -26,41 +26,35 @@ import { appHeadQuestionIcon } from './svg/head-question'
 import { appHelpIcon } from './svg/help'
 import { appMagnifyIcon } from './svg/magnify'
 
-@NgModule({
-   declarations: [
-      AppComponent,
-      SettingsComponent,
-      ColorPickerComponent,
-      GuideComponent,
-      NavbarComponent,
-      CarouselNavigationComponent
-   ],
-   imports: [
-      AppRoutingModule,
-      BrowserModule,
-      BrowserAnimationsModule,
-      FormsModule,
-      HttpClientModule,
-      NgxWebstorageModule.forRoot(),
-      SvgIconsModule.forRoot({
-        icons: [
-          appCogIcon,
-          appHelpIcon,
-          appGestureSwipeLeftIcon,
-          appGestureSwipeRightIcon,
-          appArrowLeftBoldBoxIcon,
-          appArrowRightBoldBoxIcon,
-          appHeadQuestionIcon,
-          appGithubIcon,
-          appMagnifyIcon
-        ]
-      })
-   ],
-   providers: [
-    { provide: RouteReuseStrategy, useClass: CustomReuseStrategy }
-   ],
-   bootstrap: [
-      AppComponent
-   ]
-})
+@NgModule({ declarations: [
+        AppComponent,
+        SettingsComponent,
+        ColorPickerComponent,
+        GuideComponent,
+        NavbarComponent,
+        CarouselNavigationComponent
+    ],
+    bootstrap: [
+        AppComponent
+    ], imports: [AppRoutingModule,
+        BrowserModule,
+        BrowserAnimationsModule,
+        FormsModule,
+        NgxWebstorageModule.forRoot(),
+        SvgIconsModule.forRoot({
+            icons: [
+                appCogIcon,
+                appHelpIcon,
+                appGestureSwipeLeftIcon,
+                appGestureSwipeRightIcon,
+                appArrowLeftBoldBoxIcon,
+                appArrowRightBoldBoxIcon,
+                appHeadQuestionIcon,
+                appGithubIcon,
+                appMagnifyIcon
+            ]
+        })], providers: [
+        { provide: RouteReuseStrategy, useClass: CustomReuseStrategy },
+        provideHttpClient(withInterceptorsFromDi())
+    ] })
 export class AppModule { }

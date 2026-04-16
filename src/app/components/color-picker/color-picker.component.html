@@ -4,7 +4,7 @@
     <div *ngFor="let color of colors">
       <div #colorItem class="color-item cursor-pointer mr-3" [style.backgroundColor]="color"
         (click)="saveAccentColor($event)" [class]="
-           bgColor === this.rgbStringToHexCode(this.colorItem.style.backgroundColor)
+           bgColor === this.rgbStringToHexCode(colorItem.style.backgroundColor)
            ? 'active-color-item' : ''">
       </div>
     </div>
