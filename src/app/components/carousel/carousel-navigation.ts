@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, ChangeDetectorRef, Component, NgZone, OnInit } from '@angular/core'
 import { LocalStorage, LocalStorageService } from 'ngx-webstorage'
 import { Subject } from 'rxjs'
-import { debounceTime } from 'rxjs/operators'
+import { throttleTime } from 'rxjs/operators'
 import { GifService } from 'src/app/services/gif.service'
 import { environment } from 'src/environments/environment'
 
@@ -20,8 +20,8 @@ export class CarouselNavigationComponent implements OnInit {
   private _index = 0
   private _intervalId: any
   private _isLoadGifsRunning = false
-  private nextGifSubject = new Subject<string>()
-  private previousGifSubject = new Subject<string>()
+  private nextGifSubject = new Subject<void>()
+  private previousGifSubject = new Subject<void>()
 
   constructor(
     public readonly gifService: GifService,
@@ -29,8 +29,8 @@ export class CarouselNavigationComponent implements OnInit {
     private readonly _ngZone: NgZone,
     private readonly _cdRef: ChangeDetectorRef
   ) {
-    this.nextGifSubject.pipe(debounceTime(300)).subscribe(async () => this.nextGif())
-    this.previousGifSubject.pipe(debounceTime(300)).subscribe(() => this.previousGif())
+    this.nextGifSubject.pipe(throttleTime(200, undefined, { leading: true, trailing: false })).subscribe(async () => this.nextGif())
+    this.previousGifSubject.pipe(throttleTime(200, undefined, { leading: true, trailing: false })).subscribe(() => this.previousGif())
   }
 
   public get currentGif(): string {
@@ -83,25 +83,28 @@ export class CarouselNavigationComponent implements OnInit {
   }
 
   public async nextGif(): Promise<void> {
-    if (this._isLoadGifsRunning) { return }
-
     if (this.index >= (this.gifService.gifBufferLength - 5)) {
-      await this.loadGifs()
-      this.index = 0
+      this.loadGifs() // Load in background
       console.log('Loading gifs triggered by nextGif()')
     }
 
     this.restartInterval()
 
-    this.index++
+    if (this.index < this.gifService.gifBufferLength - 1) {
+      this.index++
+    } else {
+      this.index = 0
+    }
     console.log('Next gif index:', this.index)
     console.log('GifsLength: ', this.gifService.gifs.length)
   }
 
   public previousGif(): void {
-    if (this._isLoadGifsRunning) { return }
-
-    this.index--
+    if (this.index > 0) {
+      this.index--
+    } else {
+      this.index = this.gifService.gifBufferLength - 1
+    }
     this.restartInterval()
 
     console.log('Previous gif index:', this.index)

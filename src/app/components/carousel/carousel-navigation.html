@@ -3,7 +3,7 @@
     <div class="flex flex-col lg:flex-row justify-evenly items-center h-full w-auto m-auto min-w-half">
       <div *ngIf="currentGif" class="lg:flex lg:flex-col hidden h-1/6">
         <div class="cursor-pointer flex justify-center items-center">
-          <svg-icon class="selected-color max-w-75" key="arrow-left-bold-box" (click)="previousGif()"
+          <svg-icon class="selected-color max-w-75" key="arrow-left-bold-box" (click)="triggerPreviousGif()"
             fontSize="4rem"></svg-icon>
         </div>
       </div>
@@ -14,15 +14,15 @@
 
       <div class="flex flex-row lg:flex-col h-1/6" *ngIf="currentGif">
         <div class="cursor-pointer hidden lg:flex justify-center items-start">
-          <svg-icon class="selected-color max-w-75" key="arrow-right-bold-box" (click)="nextGif()"
+          <svg-icon class="selected-color max-w-75" key="arrow-right-bold-box" (click)="triggerNextGif()"
             fontSize="4rem"></svg-icon>
         </div>
         <div class="pr-5 cursor-pointer lg:hidden inline-flex justify-center items-center">
-          <svg-icon class="selected-color max-w-75" key="arrow-left-bold-box" (click)="previousGif()"
+          <svg-icon class="selected-color max-w-75" key="arrow-left-bold-box" (click)="triggerPreviousGif()"
             fontSize="3rem"></svg-icon>
         </div>
         <div class="cursor-pointer lg:hidden inline-flex justify-center items-center">
-          <svg-icon class="selected-color max-w-75" key="arrow-right-bold-box" (click)="nextGif()"
+          <svg-icon class="selected-color max-w-75" key="arrow-right-bold-box" (click)="triggerNextGif()"
             fontSize="3rem"></svg-icon>
         </div>
       </div>

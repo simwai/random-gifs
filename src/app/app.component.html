@@ -1,6 +1,6 @@
 <div class="h-100-vh w-100-vw" (touchstart)="swipe($event, 'start')" (touchend)="swipe($event, 'end')"
   (document:keydown.arrowRight)="carouselNav.nextGif()" (document:keydown.arrowLeft)="carouselNav.previousGif()">
-  <div class="flex flex-col items-center h-full justify-around w-full">
+  <div class="flex flex-col items-center h-full justify-around w-full p-4 md:p-8">
     <div class="flex flex-row h-1/6 items-center justify-center w-full">
       <navbar (keywordChanged)="onKeywordChanged($event)" class="width-10"></navbar>
     </div>
